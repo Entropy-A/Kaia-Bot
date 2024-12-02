@@ -1,4 +1,1 @@
-console.log('Thank you for using WebStorm')
-
-
-// TODO: Hell yeah
+console.log('Test 4')
