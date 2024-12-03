@@ -12,13 +12,19 @@
     "build": "tsc",
     "dev:watch": "tsc -w",
     "dev:start": "nodemon dist/index.js",
-    "dev": "cross-env NODE_ENV=development npm-run-all --parallel dev:watch dev:start"
+    "dev:test": "nodemon dist/utils/testFile.js",
+    "dev": "cross-env NODE_ENV=development npm-run-all --parallel dev:watch dev:start",
+    "test": "cross-env NODE_ENV=development npm-run-all --parallel dev:watch dev:test"
   },
   "devDependencies": {
     "@types/node": "^22.10.1",
-    "cross-env": "^7.0.3",
     "nodemon": "^3.1.7",
     "npm-run-all": "^4.1.5",
     "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "cross-env": "^7.0.3",
+    "discord.js": "^14.16.3",
+    "dotenv": "^16.4.7"
   }
 }
