@@ -1,6 +1,3 @@
-const type = "lol"
-const origin = undefined
+import {text} from "../text/loadText.js"
 
-console.info(
-    `[Info] [${type}${origin ? ` : ${origin}` : ""}] >> "hello"`
-);
+console.log(text.error.quickErrors.alreadyPaused.get("de"))

@@ -1,0 +1,172 @@
+{
+    "error": {
+        "embedLayout": {
+            "description": "Description",
+            "cause": "Cause"
+        },
+
+        "quickErrors": {
+            "botNotConnected": "Bot is not connected to any voice.",
+            "failedCommand": "An error occured while executing this command!",
+            "userNotConnectedToVoice": "Join a voice to use this command!",
+            "notConnectedToSameVC": "You must be in the same voice as the bot to use this command!",
+            "alreadyPaused": "Bot already paused.",
+            "alreadyResumed": "Bot already resumed.",
+            "couldNotSkip": "Could not skip any song."
+        },
+
+        "UNEXPECTED_ERROR": {
+            "name": "Unexpected Error",
+            "message": "An error occured in an unkown location. Please send a **ticket** with further context to assist fixing the problem.\n**Thank you :)**"
+        },
+
+        "DCPAGE_ToManyEmbeds": {
+            "name": "Error 06-02",
+            "message": "The page has to many embeds.",
+            "cause": "embeds > 10"
+        },
+
+        "DCPAGEMENU_PageDoesNotExist": {
+            "name": "Error 07-01",
+            "message": "This page does not exist exist on this DCPageMenu.",
+            "cause": "page id not found"
+        },
+
+        "DCPAGEANCHOR_CantAnswerInteraction": {
+            "name": "Error 08-03",
+            "message": "None of the SEND methodes were valid to answer this interaction.",
+            "cause": "invalid interaction type"
+        },
+
+        "DCPAGEANCHOR_NoComponentCallback": {
+            "name": "Error 08-04",
+            "message": "Used component has no callback."
+        }
+    },
+
+    "commands":{
+        "categorys": {
+            "general": {
+                "name": "General",
+                "description": "> Verily, no additional particulars are provided."
+            },
+
+            "debug": {
+                "name": "Debug",
+                "description": "> Forsooth, meant to troubleshoot the automaton in case aught is awry or doth linger overmuch."
+            },
+
+            "music": {
+                "name": "Music",
+                "description": "> A broad array of behests thou may employ to behold mine exquisite musical prowess."
+            }
+        },
+
+        "ping": {
+            "commandDescription": "Let us witness how swiftly Ranni doth react to thy shot.",
+            "detailedDescription": {
+                "title": "Ping",
+                "description": "Showeth thee how long I needeth to devote myself unto thee.",
+                "syntax": "`/ping`",
+                "returns": "> The present reaction time of Ranni, in units of \"miliseconds\" (ms)."
+            },
+
+            "title": "*Pong* - Verily, a splendid strike!",
+            "message": {
+                "close": "By my troth! How swiftly thou didst strike... I had but a moment of [] to parry thy blow.",
+                "normal": "Hoho, didst thou behold that? It took me a whopping [] to react.\n > That was close. >-<",
+                "slow": "Goaugh... Oh WAIT! I just dozed off. Wow, [] is way too much. I'll endeavor to concentrate more!\n > *Mayhap I should procure a coffee or some such?*"
+            }
+        },
+
+        "help": {
+            "commandDescription": "Presenteth a list of commands anon.",
+            "detailedDescription": {
+                "title": "Help",
+                "description": "Showeth thee this page.",
+                "syntax": "`/help`",
+                "returns": "> A list of all the perks that Ranni doth bestow."
+            },
+
+            "selectMenuPlaceholder": "Choose a command for further elucidation",
+
+            "menu": {
+                "title": "What dost thou inquire?",
+                "description": "If thou art uncertain of what thou seek, a bar below shall display all commands enumerated.",
+                "credits": "Developed by **ENTROPY A** [*](https://github.com/Entropy-A)"
+            },
+
+            "commandFieldNames":{
+                "syntax": "Syntax",
+                "returns": "Returns"
+            },
+            "commandTitle": "Here hast thou that which thou sought.",
+            "commandFooter": "**Category:** [[]]([]) | **Command:** **[]** / []"
+        },
+
+        "play": {
+            "commandDescription": "Performeth any song thou dost request.",
+            "detailedDescription": {
+                "title": "Play",
+                "description": "Plays any song thou dost enter in the box. Thou mayest offer either the `name` or a `link` to the song.\n**YouTube**, **Spotify** and more are supported.",
+                "syntax": "`/play [title]`",
+                "returns": "> Result of the search."
+            },
+
+            "optionDescription": "Title / URL",
+            "playerStart": "Make thee ready to revel!",
+            "addToQueue": "Added to queue!"
+        },
+
+        "skip": {
+            "commandDescription": "Skippeth to the next song in the queue.",
+            "detailedDescription": {
+                "title": "Skip",
+                "description": "Skippeth to the next song in the queue.",
+                "syntax": "`/skip`",
+                "returns": "> Next song."
+            },
+
+            "title": "Skipped to:",
+            "empty": "You finished the queue!"
+        },
+
+        "pause": {
+            "commandDescription": "Holdeth the melody to take thy rest.",
+            "detailedDescription": {
+                "title": "Pause",
+                "description": "Holdeth the melody to take thy rest.",
+                "syntax": "`/pause`",
+                "returns": "> Pauses song."
+            },
+
+            "title": "Paused playing."
+        },
+
+        "resume": {
+            "commandDescription": "Begin again the current melody.",
+            "detailedDescription": {
+                "title": "Resume",
+                "description": "Begin again the current melody.",
+                "syntax": "`/resume`",
+                "returns": "> Resumes song."
+            },
+
+            "title": "Resumed playing."
+        },
+
+        "remind": {
+            "commandDescription": "Starts the reminders editing mode.",
+            "detailedDescription": {
+                "title": "Remind",
+                "description": "Starts the reminders editing mode. the interface can be used to edit current reminders and add new ones.",
+                "syntax": "`/remind`",
+                "returns": "> Reminders menu."
+            },
+
+            "title": "Remind Me",
+            "newReminderTitle": "New Reminder",
+            "newReminderSelect": "Type"
+        }
+    }
+}

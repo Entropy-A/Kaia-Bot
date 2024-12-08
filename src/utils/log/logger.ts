@@ -6,29 +6,51 @@ export enum LoggerType {
 }
 
 /**
- * Custom logger to bind log to some origin.
- * @param LoggerData - { type: LoggerType, origin: string }
+ * Custom logger to bind log to some "origin" that is UNKNOWN beforehand.
  */
-export class Logger  {
+export class DynamicLogger  {
     constructor(
-        public readonly type: LoggerType,
-        public readonly origin?: string)
+        public readonly type: LoggerType)
     {} // TODO: What if origin is not knows before class is inizialised. Like in system when login error
 
-    // Only shows origin in message when defined.
+    public log(origin: string | null, ...message: unknown[]) {
+        console.log(`[Log] [${this.type}${origin ? `: ${origin}` : ""}] >> ${message}`)
+    }
+
+    public info(origin: string | null, ...message: unknown[]) {
+        console.info(`[Info] [${this.type}${origin ? `: ${origin}` : ""}] >> ${message}`)
+    }
+
+    public warn(origin: string | null, ...message: unknown[]) {
+        console.warn(`[Warn] [${this.type}${origin ? `: ${origin}` : ""}] >> ${message}`)
+    }
+
+    public error(origin: string | null, ...message: unknown[]) {
+        console.error(`[Error] [${this.type}${origin ? `: ${origin}` : ""}] >> ${message}`)
+    }
+}
+
+/**
+ * Custom logger to bind log to some "origin" that is FIXED.
+ */
+export class StaticLogger extends DynamicLogger {
+    constructor(type: LoggerType,
+        public readonly origin: string | null = null)
+    {super(type)};
+
     public log(...message: unknown[]) {
-        console.log(`[Log] [${this.type}${this.origin ? `: ${this.origin}` : ""}] >> ${message}`)
+        super.log(this.origin, ...message)
     }
 
     public info(...message: unknown[]) {
-        console.info(`[Info] [${this.type}${this.origin ? `: ${this.origin}` : ""}] >> ${message}`)
+        super.info(this.origin, ...message)
     }
 
     public warn(...message: unknown[]) {
-        console.warn(`[Warn] [${this.type}${this.origin ? `: ${this.origin}` : ""}] >> ${message}`)
+        super.warn(this.origin, ...message)
     }
 
     public error(...message: unknown[]) {
-        console.error(`[Error] [${this.type}${this.origin ? `: ${this.origin}` : ""}] >> ${message}`)
+        super.error(this.origin, ...message)
     }
 }
