@@ -11,7 +11,7 @@ export enum LoggerType {
 export class DynamicLogger  {
     constructor(
         public readonly type: LoggerType)
-    {} // TODO: What if origin is not knows before class is inizialised. Like in system when login error
+    {}
 
     public log(origin: string | null, ...message: unknown[]) {
         console.log(`[Log] [${this.type}${origin ? `: ${origin}` : ""}] >> ${message}`)

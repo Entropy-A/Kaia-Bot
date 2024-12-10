@@ -3,6 +3,7 @@ import {Locale, LocaleString} from "discord.js";
 import fs from "fs";
 import {z} from "zod";
 import {getDeepestElements, MyJSON} from "../utils/index.js";
+import {syslog} from "../index.js";
 
 // TODO: Rewatch if everything works and improve coe (errror handling)
 // Create the Zod schema
@@ -14,41 +15,50 @@ const textDataSchema = z.object({
             cause: z.string(),
         }),
 
-        quickErrors: z.object({
-            botNotConnected: z.string(),
-            failedCommand: z.string(),
-            userNotConnectedToVoice: z.string(),
-            notConnectedToSameVC: z.string(),
-            alreadyPaused: z.string(),
-            alreadyResumed: z.string(),
-            couldNotSkip: z.string(),
+        botNotConnected: z.object({
+            title: z.string().optional(),
+            message: z.string(),
+            cause: z.string().optional(),
+        }),
+
+        failedCommand: z.object({
+            title: z.string().optional(),
+            message: z.string(),
+            cause: z.string().optional(),
+        }),
+
+        userNotConnectedToVoice: z.object({
+            title: z.string().optional(),
+            message: z.string(),
+            cause: z.string().optional(),
+        }),
+
+        notConnectedToSameVC: z.object({
+            title: z.string().optional(),
+            message: z.string(),
+            cause: z.string().optional(),
+        }),
+
+        alreadyPaused: z.object({
+            title: z.string().optional(),
+            message: z.string(),
+            cause: z.string().optional(),
+        }),
+
+        alreadyResumed: z.object({
+            title: z.string().optional(),
+            message: z.string(),
+            cause: z.string().optional(),
+        }),
+
+        couldNotSkip: z.object({
+            title: z.string().optional(),
+            message: z.string(),
+            cause: z.string().optional(),
         }),
 
         UNEXPECTED_ERROR: z.object({
-            name: z.string(),
-            message: z.string(),
-        }),
-
-        DCPAGE_ToManyEmbeds: z.object({
-            name: z.string(),
-            message: z.string(),
-            cause: z.string(),
-        }),
-
-        DCPAGEMENU_PageDoesNotExist: z.object({
-            name: z.string(),
-            message: z.string(),
-            cause: z.string(),
-        }),
-
-        DCPAGEANCHOR_CantAnswerInteraction: z.object({
-            name: z.string(),
-            message: z.string(),
-            cause: z.string(),
-        }),
-
-        DCPAGEANCHOR_NoComponentCallback: z.object({
-            name: z.string(),
+            title: z.string(),
             message: z.string(),
         }),
     }),
@@ -179,13 +189,13 @@ const textDataSchema = z.object({
 type InferredType = z.infer<typeof textDataSchema>;
 // Recursively map the type so that "string" gets replaced with "LocaleText"
 type ReplaceStringWithLocaleText<T> = {
-    [K in keyof T]: T[K] extends string ? LocaleText : T[K] extends Record<any, any> ? ReplaceStringWithLocaleText<T[K]> : T[K];
+    [K in keyof T]: T[K] extends string | undefined ? LocaleText : T[K] extends Record<any, any> ? ReplaceStringWithLocaleText<T[K]> : T[K];
 };
 type TextData = ReplaceStringWithLocaleText<InferredType>;
 
 const Locals = Object.values(Locale)
 
-/*
+/**
  * Class to make local-text-handling easier.
  * @function get(local) Returns string corresponding to specified locale.
  * @function insertInMessage(local) Inserts array of strings into the message at ever instance of "[]" and returns specified locale.
@@ -231,8 +241,7 @@ for (const file of files) {
 
     // Check if file matches the schema
     textDataSchema.parse(data);
-    // TODO: Log
-    console.log("Validation successful: JSON matches the schema.");
+    syslog.log("Text validation", "Successful: JSON matches the schema.")
 
     const id: LocaleString = fileId
     languages[id] = plainToInstance(Object, data);

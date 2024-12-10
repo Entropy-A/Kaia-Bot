@@ -5,42 +5,31 @@
             "cause": "Cause"
         },
 
-        "quickErrors": {
-            "botNotConnected": "Bot is not connected to any voice.",
-            "failedCommand": "An error occured while executing this command!",
-            "userNotConnectedToVoice": "Join a voice to use this command!",
-            "notConnectedToSameVC": "You must be in the same voice as the bot to use this command!",
-            "alreadyPaused": "Bot already paused.",
-            "alreadyResumed": "Bot already resumed.",
-            "couldNotSkip": "Could not skip any song."
+        "botNotConnected": {
+            "message": "Bot is not connected to any voice."
+        },
+        "failedCommand": {
+            "message": "An error occured while executing this command!"
+        },
+        "userNotConnectedToVoice": {
+            "message": "Join a voice to use this command!"
+        },
+        "notConnectedToSameVC": {
+            "message": "You must be in the same voice as the bot to use this command!"
+        },
+        "alreadyPaused": {
+            "message": "Bot already paused."
+        },
+        "alreadyResumed": {
+            "message": "Bot already resumed."
+        },
+        "couldNotSkip": {
+            "message": "Could not skip any song."
         },
 
         "UNEXPECTED_ERROR": {
-            "name": "Unexpected Error",
+            "title": "Unexpected Error",
             "message": "An error occured in an unkown location. Please send a **ticket** with further context to assist fixing the problem.\n**Thank you :)**"
-        },
-
-        "DCPAGE_ToManyEmbeds": {
-            "name": "Error 06-02",
-            "message": "The page has to many embeds.",
-            "cause": "embeds > 10"
-        },
-
-        "DCPAGEMENU_PageDoesNotExist": {
-            "name": "Error 07-01",
-            "message": "This page does not exist exist on this DCPageMenu.",
-            "cause": "page id not found"
-        },
-
-        "DCPAGEANCHOR_CantAnswerInteraction": {
-            "name": "Error 08-03",
-            "message": "None of the SEND methodes were valid to answer this interaction.",
-            "cause": "invalid interaction type"
-        },
-
-        "DCPAGEANCHOR_NoComponentCallback": {
-            "name": "Error 08-04",
-            "message": "Used component has no callback."
         }
     },
 

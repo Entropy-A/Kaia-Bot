@@ -1,13 +1,19 @@
 import {ZodError} from "zod";
+import {DynamicLogger, LoggerType} from "./utils/index.js";
 
-// Check if text loads correctly
+export const syslog = new DynamicLogger(LoggerType.SYSTEM)
+
 import("./text/loadText.js").catch(e => {
+    // Check if text loads correctly.
     if (e instanceof ZodError) {
-        console.error("Validation failed at the following paths:"); // TODO: better Log
+        syslog.error("Text validation", "Failed.")
         for (const err of e.errors) {
-            console.error(`Path: ${err.path.join(".")} - Message: ${err.message}`);
+            syslog.error("Text validation", `${err.path.join(".")}: ${err.message}`);
         }
     } else {
-        console.error("Unknown error occurred:", e);
+        syslog.error("Text validation", "Unknown error occurred:", e);
     }
+    process.exit(1);
+}).then(() => {
+
 })
