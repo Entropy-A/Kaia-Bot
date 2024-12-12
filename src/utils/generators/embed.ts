@@ -24,9 +24,11 @@ export class EmbedGenerator extends EmbedBuilder {
             if (error.cause) {
                 embed.addFields({name: text.error.embedLayout.cause.get(locale), value: error.cause.get(locale)});
             }
+        } else {
+            embed
+                .setAuthor({iconURL: Images.errorIcon, name: text.error.UNEXPECTED_ERROR.title.get(locale)})
+                .setDescription(text.error.UNEXPECTED_ERROR.message.get(locale))
         }
         return embed
-            .setAuthor({iconURL: Images.errorIcon, name: text.error.UNEXPECTED_ERROR.title.get(locale)})
-            .setDescription(text.error.UNEXPECTED_ERROR.message.get(locale))
-        }
+    }
 }
