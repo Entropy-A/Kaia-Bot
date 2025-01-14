@@ -3,3 +3,4 @@ package-lock.json
 dist
 .dev.env
 .env
+nodemon.json

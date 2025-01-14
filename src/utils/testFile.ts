@@ -1,3 +1,4 @@
 import {text} from "../text/loadText.js"
+import {syslog} from "./log/logger.js";
 
-console.log(text.error.alreadyPaused.name?.get("en-US"))
+import("../text/loadText.js")

@@ -1,11 +1,10 @@
 import fs from "fs"
 
-export namespace MyJSON {
-    export function parse(path: string): any {
-        const data = fs.readFileSync(path, "utf-8")
-        return  JSON.parse(data)
-    }
+export function parse(path: string): any {
+    const data = fs.readFileSync(path, "utf-8")
+    return  JSON.parse(data)
 }
+
 
 export function getDeepestElements(object: Object, path: string[] = []): { value: unknown; path: string[] }[] {
     const values = [];

@@ -35,7 +35,7 @@ export class DynamicLogger  {
  */
 export class StaticLogger extends DynamicLogger {
     constructor(type: LoggerType,
-        public readonly origin: string | null = null)
+        public readonly origin: string)
     {super(type)};
 
     public log(...message: unknown[]) {
@@ -54,3 +54,6 @@ export class StaticLogger extends DynamicLogger {
         super.error(this.origin, ...message)
     }
 }
+
+// For system logs like "booting up" where the origins are unknown.
+export const syslog = new DynamicLogger(LoggerType.SYSTEM);

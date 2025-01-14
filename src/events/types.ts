@@ -20,11 +20,11 @@ export interface EventData<K extends EventKeys> {
 export class Event<K extends EventKeys = EventKeys> implements EventData<K> {
     public readonly key: K
     public readonly callback: EventCallback<K>
-    public readonly once?: boolean = false
+    public readonly once: boolean
 
     constructor(data: EventData<K>) {
         this.key = data.key;
         this.callback = data.callback;
-        this.once = data.once;
+        this.once = data.once ?? false;
     }
 }
