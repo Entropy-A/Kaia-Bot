@@ -1,4 +1,3 @@
-import {plainToInstance} from "class-transformer";
 import {Locale, LocaleString} from "discord.js";
 import fs from "fs";
 import {z, ZodError} from "zod";

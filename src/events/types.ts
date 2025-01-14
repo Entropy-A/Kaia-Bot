@@ -1,5 +1,4 @@
 import {ClientEvents, Awaitable} from "discord.js";
-import {StaticLogger} from "../utils/index.js";
 import {Callback} from "../types/common.js";
 
 export {Events} from "discord.js"

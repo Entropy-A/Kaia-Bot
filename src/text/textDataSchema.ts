@@ -1,5 +1,4 @@
-import {z, ZodError} from "zod";
-import {syslog} from "../utils/index.js";
+import {z} from "zod";
 
 export const textDataSchema = z.object({
     error: z.object({
