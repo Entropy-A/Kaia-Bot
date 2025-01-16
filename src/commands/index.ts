@@ -2,6 +2,7 @@ import {CommandCategory, CommandTypes} from "./types.js";
 import {Collection} from "discord.js";
 export * from "./types.js"
 export * from "./registerCommands.js"
+export * from "./handleCommands.js"
 
 import debug from "./debug/index.js"
 
