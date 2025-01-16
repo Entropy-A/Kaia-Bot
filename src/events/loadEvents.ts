@@ -1,5 +1,5 @@
 import {Client} from "discord.js";
-import {LoggerType, StaticLogger} from "../utils/index.js";
+import {LoggerType, StaticLogger, syslog} from "../utils/index.js";
 import {Event} from "./types.js";
 
 enum method {
@@ -21,4 +21,5 @@ export async function loadEvents (client: Client, events: Event[]) {
     for (const event of events) {
         registerEvent(event, event.once ? method.once : method.on);
     }
+    syslog.log("Event loading", "Events loaded.");
 }

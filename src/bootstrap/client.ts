@@ -4,6 +4,7 @@ import {HooksRegistry, Symbols} from "../hooks/registry.js";
 import {Keys} from "../keys/keys.js";
 import {syslog} from "../utils/index.js";
 import {loadEvents, events} from "../events/index.js"
+import {commands, registerCommands} from "../commands/index.js";
 
 
 const client = new Client({
@@ -15,11 +16,18 @@ HooksRegistry.set(Symbols.kClient, client);
 
 client.login(Keys.token)
     .catch((e) => {
-        syslog.error("Login Error", e);
+        syslog.error("Login", e);
         process.exit(1);
-    }).then(async () => {
+    })
+    .then(async () => {
         await loadEvents(client, events)
     }).catch((e) => {
-        syslog.error("Event Loading", e);
+        syslog.error("Event loading", e);
         process.exit(1);
+    })
+    .then(async () => {
+        await registerCommands(client, commands)
+    }).catch((e) => {
+    console.error("Command loading", e);
+    process.exit(1);
 })

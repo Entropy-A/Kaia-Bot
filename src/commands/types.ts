@@ -4,7 +4,7 @@ import {
     ApplicationCommandType,
     Awaitable,
     ChatInputApplicationCommandData,
-    ChatInputCommandInteraction,
+    ChatInputCommandInteraction, Collection,
     CommandInteraction,
     MessageApplicationCommandData,
     MessageContextMenuCommandInteraction,
@@ -28,7 +28,7 @@ interface CommandDescription {
     returns: LocaleText
 }
 
-type CommandCallback<I extends CommandInteraction> = Callback<Awaitable<unknown>, I>;
+export type CommandCallback<I extends CommandInteraction> = Callback<Awaitable<unknown>, I>;
 
 interface CommandData<D extends ApplicationCommandData> {
     data: D,
@@ -56,7 +56,6 @@ export class Command<D extends ApplicationCommandData> implements CommandData<D>
     public readonly icon;
     public readonly color;
     public readonly description
-    public readonly category?: string;
     public readonly callback;
 
     /**
@@ -77,8 +76,9 @@ export type CommandTypes = Command<ChatInputApplicationCommandData> | Command<Us
 
 
 interface CommandCategoryData {
-    name: LocaleText,
-    commands: (CommandTypes)[],
+    name: string,
+    title: LocaleText,
+    commands: Collection<string, CommandTypes>,
     description?: LocaleText,
     emoji?: string
 }
@@ -87,7 +87,8 @@ interface CommandCategoryData {
  */
 export class CommandCategory implements CommandCategoryData{
 
-    public readonly name;
+    public readonly name
+    public readonly title;
     /**
      * Array of commands that belong to that category.
      */
@@ -97,6 +98,7 @@ export class CommandCategory implements CommandCategoryData{
 
     constructor (data: CommandCategoryData) {
         this.name = data.name
+        this.title = data.title
         this.commands = data.commands
         this.description = data.description
         this.emoji = data.emoji
