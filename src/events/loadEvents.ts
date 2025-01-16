@@ -6,7 +6,7 @@ enum method {
     on = "on",
     once = "once",
 }
-export function loadEvents (client: Client, events: Event[]) {
+export async function loadEvents (client: Client, events: Event[]) {
     const registerEvent = (event: Event, method: method) => {
         const logger = new StaticLogger(LoggerType.EVENT, event.key);
         client[method](event.key, (...args) => {

@@ -17,8 +17,8 @@ client.login(Keys.token)
     .catch((e) => {
         syslog.error("Login Error", e);
         process.exit(1);
-    }).then(() => {
-        loadEvents(client, events)
+    }).then(async () => {
+        await loadEvents(client, events)
     }).catch((e) => {
         syslog.error("Event Loading", e);
         process.exit(1);

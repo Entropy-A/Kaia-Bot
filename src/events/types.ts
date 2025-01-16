@@ -12,15 +12,16 @@ export interface EventData<K extends EventKeys> {
 }
 
 /**
- * @param {EventKeys} eventKey
- * @param {EventCallback} callback
- * @param {Boolean} once (optional) default: false
+ * Class for event handling.
  */
 export class Event<K extends EventKeys = EventKeys> implements EventData<K> {
-    public readonly key: K
-    public readonly callback: EventCallback<K>
-    public readonly once: boolean
+    public readonly key
+    public readonly callback
+    public readonly once
 
+    /**
+     * @param data.key Key: Events.[...]
+     */
     constructor(data: EventData<K>) {
         this.key = data.key;
         this.callback = data.callback;
