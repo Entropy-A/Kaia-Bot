@@ -19,15 +19,17 @@ client.login(Keys.token)
         syslog.error("Login", e);
         process.exit(1);
     })
+
     .then(async () => {
         await loadEvents(client, events)
     }).catch((e) => {
         syslog.error("Event loading", e);
         process.exit(1);
     })
+
     .then(async () => {
         await registerCommands(client, commands)
     }).catch((e) => {
-    console.error("Command loading", e);
-    process.exit(1);
+        console.error("Command loading", e);
+        process.exit(1);
 })

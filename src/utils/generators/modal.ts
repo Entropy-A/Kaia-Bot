@@ -1,5 +1,5 @@
 import { ActionRowBuilder, ModalBuilder, ModalComponentData, TextInputBuilder, TextInputStyle} from "discord.js";
-import { GeneratorDataMap } from "../../types/index.js"
+import {GeneratorDataMap} from "./index.js";
 
 type ModalData = GeneratorDataMap<ModalBuilder>
 

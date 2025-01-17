@@ -1,14 +1,12 @@
 import {
     Awaitable,
     BaseInteraction,
-    ButtonBuilder, ButtonComponentData, ButtonInteraction, ChannelSelectMenuBuilder, ChannelSelectMenuInteraction,
-    Client, EmbedBuilder, EmbedData, MentionableSelectMenuBuilder, MentionableSelectMenuInteraction,
+    ButtonBuilder,
+    Client,
     ModalBuilder,
-    RoleSelectMenuBuilder, RoleSelectMenuInteraction,
-    StringSelectMenuBuilder, StringSelectMenuInteraction, UserSelectMenuBuilder, UserSelectMenuInteraction
 } from "discord.js";
 import {StaticLogger} from "../utils/index.js";
-import {ButtonGenerator, ComponentGenerators, StringSelectGenerator} from "../utils/generators/index.js";
+import {ComponentGenerators,InteractionGeneratorMap,} from "../utils/generators/index.js";
 
 export interface CallbackProps<Interaction extends BaseInteraction | null> {
     interaction: Interaction,
@@ -23,15 +21,6 @@ export type Callback<ReturnType, Interaction extends BaseInteraction | null, Arg
 
 export type VisibilityCallback = Callback<boolean, BaseInteraction | null>
 
-type InteractionGeneratorMap<ComponentGenerator extends ComponentGenerators> =
-    ComponentGenerator extends ButtonGenerator ? ButtonInteraction :
-    ComponentGenerator extends StringSelectGenerator ?  StringSelectMenuInteraction :
-    //ComponentGenerator extends RoleSelectGenerator ?  RoleSelectMenuInteraction :
-    //ComponentGenerator extends ChannelSelectGenerator ?  ChannelSelectMenuInteraction :
-    //ComponentGenerator extends UserSelectGenerator ?  UserSelectMenuInteraction :
-    //ComponentGenerator extends MentionableSelectGenerator ?  MentionableSelectMenuInteraction :
-    never;
-
 export interface ComponentProtoData<Generator extends ComponentGenerators> {
     id: string,
     generator: Generator,
@@ -41,7 +30,7 @@ export interface ComponentProtoData<Generator extends ComponentGenerators> {
 
 /**
  * Abstract class for creating MessageComponents.
- * @param generic Type of componentbuilder.
+ * @param generic Type of component-builder.
  */
 export abstract class ComponentPrototype<Generator extends ComponentGenerators> implements ComponentProtoData<Generator>{
     /**

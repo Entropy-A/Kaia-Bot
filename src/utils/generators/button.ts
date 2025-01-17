@@ -1,6 +1,6 @@
 import { ButtonBuilder, ButtonStyle, ButtonComponentData} from "discord.js";
-import { GeneratorDataMap } from "../../types/index.js"
 import { Emojis } from "../../config/index.js";
+import {GeneratorDataMap} from "./index.js";
 
 type Data = GeneratorDataMap<ButtonBuilder>
 

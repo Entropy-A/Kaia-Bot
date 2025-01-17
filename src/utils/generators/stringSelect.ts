@@ -1,5 +1,5 @@
 import { StringSelectMenuBuilder, StringSelectMenuComponentData} from "discord.js";
-import { GeneratorDataMap} from "../../types/index.js"
+import {GeneratorDataMap} from "./index.js";
 
 type StringData = GeneratorDataMap<StringSelectMenuBuilder>
 
