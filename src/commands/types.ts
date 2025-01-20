@@ -76,8 +76,8 @@ export type CommandTypes = Command<ChatInputApplicationCommandData> | Command<Us
 
 
 interface CommandCategoryData {
-    name: string,
-    title: LocaleText,
+    id: string,
+    name: LocaleText,
     commands: Collection<string, CommandTypes>,
     description?: LocaleText,
     emoji?: string
@@ -87,8 +87,8 @@ interface CommandCategoryData {
  */
 export class CommandCategory implements CommandCategoryData{
 
-    public readonly name
-    public readonly title;
+    public readonly id
+    public readonly name;
     /**
      * Array of commands that belong to that category.
      */
@@ -97,8 +97,8 @@ export class CommandCategory implements CommandCategoryData{
     public readonly emoji?;
 
     constructor (data: CommandCategoryData) {
+        this.id = data.id
         this.name = data.name
-        this.title = data.title
         this.commands = data.commands
         this.description = data.description
         this.emoji = data.emoji

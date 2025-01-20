@@ -1,7 +1,7 @@
 import {
     ActionRowBuilder,
     BaseInteraction,
-    BaseMessageOptions,
+    BaseMessageOptions, Collection,
     Interaction,
     InteractionReplyOptions,
     InteractionResponse,
@@ -23,7 +23,7 @@ enum AnchorHandling {
     update,
 }
 
-export interface PageData {
+export interface PageData{
     readonly id: string,
     color?: Colors,
     embeds?: readonly [
@@ -39,7 +39,54 @@ export interface PageData {
     ] // TODO: Find better way --> components.ts
 }
 
-class PageAnchor  {
+export class Page {
+    constructor(protected _data: PageData) {}
+
+    get data(): PageData {
+        return this._data
+    }
+    /**
+     * Adds embeds to page.
+     */
+    public addEmbeds(embeds: PageData["embeds"]): this {
+        const newEmbeds = [...this._data.embeds ?? [], ...embeds ?? []];
+        if (newEmbeds.length > 10) throw new Error(`To many embeds on page: ${this._data.id}`);
+        else this._data.embeds = newEmbeds.length > 0 ? newEmbeds as unknown as PageData["embeds"] : undefined; // ? Currently no better way to work around "source may have more elements error".
+        return this
+    }
+
+    /**
+     * Adds components to page.
+     */
+    public addComponentRows(components: PageData["components"]): this {
+        const newComponents = [...this._data.components ?? [], ...components ?? []]
+        if (newComponents.length > 5) throw new Error(`To many component rows on page: ${this._data.id}`)
+        else this._data.components = newComponents.length > 0 ? newComponents as unknown as PageData["components"] : undefined; // ? Currently no better way to work around "source may have more elements error".
+        return this
+    }
+
+    /**
+     * Replies with page to interaction.
+     * @param interaction
+     * @param timeout How long the page is visible.
+     * @param ephemeral If only the author can see it.
+     */
+    public send(interaction: BaseInteraction, timeout?: number, ephemeral?: boolean) {
+        return new PageAnchor(this._data).send(interaction, timeout, ephemeral)
+    }
+
+    /**
+     * Follows up with page to interaction.
+     * @param interaction
+     * @param timeout How long the page is visible.
+     * @param ephemeral If only the author can see it.
+     */
+    public sendFollowUp(interaction: BaseInteraction, timeout?: number, ephemeral?: boolean) {
+        return new PageAnchor(this._data).sendFollowUp(interaction, timeout, ephemeral)
+    }
+}
+
+class PageAnchor {
     protected pageLogger: StaticLogger
     protected activeComponents: ComponentPrototypes[][] = []
     protected anchor?: Message | InteractionResponse
@@ -52,23 +99,24 @@ class PageAnchor  {
     /**
      * Replies with page to interaction.
      */
-    public reply(interaction: BaseInteraction, timeout?: number, ephemeral?: boolean) {
+    public send(interaction: BaseInteraction, timeout?: number, ephemeral?: boolean) {
         return this.handleInteractions(interaction, AnchorHandling.send, timeout, ephemeral)
     }
 
     /**
      * Follows up with page to interaction.
      */
-    public followUp(interaction: BaseInteraction, timeout?: number, ephemeral?: boolean) {
+    public sendFollowUp(interaction: BaseInteraction, timeout?: number, ephemeral?: boolean) {
         return this.handleInteractions(interaction, AnchorHandling.followUp, timeout, ephemeral)
     }
 
     /**
      * Updates page to a new page.
      */
-    public update(interaction: BaseInteraction, newPage?: PageAnchor) {
+    public update(interaction: BaseInteraction, newPage?: Page) {
         this.data = newPage?.data ?? this.data
         this.pageLogger = new StaticLogger(LoggerType.PAGE, this.data.id)
+        this.applyColor()
         return this.handleInteractions(interaction, AnchorHandling.update)
     }
 
@@ -118,7 +166,7 @@ class PageAnchor  {
                 }
                 break;
 
-            default: throw new Error("Page-anchor chant answer interaction")
+            default: throw new Error("Page-anchor cant answer interaction")
         }
         return this
     }
@@ -139,7 +187,7 @@ class PageAnchor  {
         return this
         }
 
-    private handleComponentInteraction(interaction: MessageComponentInteraction) {
+    protected handleComponentInteraction(interaction: MessageComponentInteraction) {
         // ! Currently working. If any error occurs: Use else if chain.
         const callbackParams: CallbackProps<any> = {interaction, client: useClient(), logger: this.pageLogger};
         for (const component of this.activeComponents.flat()) {
@@ -202,5 +250,261 @@ class PageAnchor  {
             if (embed) embed.data.color = this.data.color
         })
         return this
+    }
+}
+
+export interface PageMenuData {
+    readonly id: string,
+    categories?: Record<string, PageMenuCategory>
+}
+
+interface PageMenuCategory {
+    readonly id: string
+    pages: Record<string, Page>
+}
+
+type DynamicEmbedUpdate = ((
+    page: Page
+) => PageData["embeds"])
+
+export class PageMenu {
+    protected anchor?: PageAnchor
+    protected dynamicEmbedUpdates?: DynamicEmbedUpdate[]
+
+    public currentCategory?: {
+        category: PageMenuCategory
+        index: number
+    }
+    public currentPage?: {
+        page: Page,
+        index: number,
+    }
+
+    constructor(protected data: PageMenuData) {}
+    /**
+     * Adds pages to category (auto creates new category).
+     */
+    public addPages(pages: Page[], category: string): this {
+        if (!this.data.categories) this.data.categories = {}
+        if (!this.data.categories[category]) this.data.categories[category] = {id: category, pages: {}}
+
+        for (const page of pages) {
+            if (this.data.categories[category].pages[page.data.id]) {
+                throw new Error(`Page with id: [${page.data.id}] already exists in category: [${category}] of pageMenu: [${this.data.id}].`);
+            }
+            this.data.categories[category].pages[page.data.id] = page;
+        }
+        return this;
+    }
+
+    /**
+     * Add a set of categories.
+     */
+    public addCategories(categories: PageMenuCategory[]): this {
+        if (!this.data.categories) this.data.categories = {}
+
+        for (const category of categories) {
+            this.data.categories[category.id] = category
+        }
+        return this
+    }
+
+    /**
+     * Add components to all existing pages.
+     */
+    public addGlobalComponentRows(components: PageData["components"]): this {
+        if (!this.data.categories) return this
+        Object.values(this.data.categories).forEach(({pages}) => {
+            Object.values(pages).forEach((page) => {
+                page.addComponentRows(components);
+            });
+        });
+
+        return this
+    }
+
+    /**
+     * Add callbacks that may modify all existing embeds.
+     */
+    public addDynamicEmbedUpdates(callbacks: DynamicEmbedUpdate[]): this {
+        if(!this.dynamicEmbedUpdates) this.dynamicEmbedUpdates = []
+        this.dynamicEmbedUpdates = [...this.dynamicEmbedUpdates, ...callbacks]
+
+        return this
+    }
+
+    /**
+     * Get page and corresponding data by page.
+     */
+    public getCategoryByPage(key: string | Page): {category: PageMenuCategory, index: number } | undefined {
+        if (!this.data.categories) return undefined
+
+        for (const [index, category] of Object.values(this.data.categories).entries()) {
+            if (typeof key === "string" && category.pages[key] || key instanceof Page &&  Object.values(category.pages).includes(key)) return {index, category}
+        }
+        return undefined
+    }
+
+    /**
+     * Get page and corresponding data by id or page.
+     */
+    public getPage(key: string | Page): {page: Page, index: number } | undefined {
+        if (!this.data.categories) return undefined
+
+        for (const [index, page] of Object.values(this.data.categories).flatMap(({pages}) => {return Object.values(pages)}).entries()) {
+            if (typeof key === "string" && page.data.id === key || key instanceof Page &&  page === key) return {index, page}
+        }
+        return undefined
+    }
+
+    /**
+     * Get page and corresponding data by id or category.
+     */
+    public getCategory(key: string | PageMenuCategory): {category: PageMenuCategory, index: number } | undefined {
+        if (!this.data.categories) return undefined
+
+        for (const [index, category] of Object.values(this.data.categories).entries()) {
+            if (typeof key === "string" && category.id === key || Object.values(category).includes(key)) return {index, category}
+        }
+        return undefined
+    }
+
+    /**
+     * Replies with page to interaction.
+     * @param timeout How long the page is visible.
+     * @param ephemeral If only the author can see it.
+     */
+    public async send(page: string | Page, interaction: BaseInteraction, timeout?: number, ephemeral?: boolean) {
+        await this.setAnchor(page).send(interaction, timeout, ephemeral)
+    }
+
+    /**
+     * Follows up with page to interaction.
+     * @param timeout How long the page is visible.
+     * @param ephemeral If only the author can see it.
+     */
+    public async followUp(page: string | Page, interaction: BaseInteraction, timeout?: number, ephemeral?: boolean) {
+        await this.setAnchor(page).sendFollowUp(interaction, timeout, ephemeral)
+    }
+
+    /**
+     * Updates page to a new page.
+     */
+    public async update(interaction: BaseInteraction, newPage: string | Page) {
+        if (!this.anchor) throw new Error(`The page on pageMenu: [${this.data.id}] can't be updated before it was send.`)
+        await this.setAnchor(newPage).update(interaction)
+    }
+
+    protected setAnchor(page: string | Page): PageAnchor {
+        const foundPage = this.getPage(page)
+        const foundCategory = this.getCategoryByPage(page)
+        if(!foundPage) throw new Error(`Cannot find page with id: [${typeof page === "string" ? page : page.data.id}] in pageMenu: [${this.data.id}].]`)
+        if(!foundPage) throw new Error(`Cannot find category with member: [${typeof page === "string" ? page : page.data.id}] in pageMenu: [${this.data.id}].]`)
+        this.currentPage = foundPage
+        this.currentCategory = foundCategory
+
+        // Initialize new anchor.
+        if (!this.anchor) this.anchor = new PageAnchor(this.applyDynamicPageUpdates(foundPage.page).data)
+        else this.anchor.data = this.applyDynamicPageUpdates(foundPage.page).data
+
+        return this.anchor
+    }
+
+    protected applyDynamicPageUpdates(page: Page): Page {
+        if(!this.dynamicEmbedUpdates) return page
+        const updatedPage = new Page(page.data)
+
+        // * Apply every callback on embed.
+        for (const callback of this.dynamicEmbedUpdates) {
+            updatedPage.data.embeds = callback(page)
+        }
+        return updatedPage
+    }
+
+    // Utils:
+
+    // TODO: Try to optimize
+    defaultButtonCallbacks = {
+        /**
+         * Jumps to next page in category.
+         */
+        nextInCategory: async (interaction: BaseInteraction) => {
+            if (!this.currentPage || !this.currentCategory) throw new Error(`No anchor was initialized on a this pageMenu: [${this.data.id}].`)
+
+            let nextIndex = this.currentPage.index + 1
+            if (nextIndex >= Object.values(this.currentCategory.category.pages).length) nextIndex = 0
+
+            const nextPage = Object.values(this.currentCategory.category.pages)[nextIndex]
+            await this.update(interaction, nextPage)
+        },
+
+        /**
+         * Jumps to next page in category and skips to next category if at the end of the current category.
+         * @param skipCategory Index or id of category that are skipped.
+         */
+        absoluteNext: async (interaction: BaseInteraction, skipCategory?: (number | string)[]) => {
+            if (!this.currentPage || !this.currentCategory || !this.data.categories) throw new Error(`No anchor was initialized on a this pageMenu: [${this.data.id}].`)
+
+            const categories = Object.values(this.data.categories)
+            let nextCategoryIndex = this.currentCategory.index
+            let nextPageIndex = this.currentPage.index + 1
+            let nextPage = undefined
+
+            // Skip category?
+            if (skipCategory && nextCategoryIndex in skipCategory) nextCategoryIndex++
+            if (skipCategory && Object.values(categories[nextCategoryIndex])[nextPageIndex].data.id in skipCategory) nextCategoryIndex++
+
+            if (nextPageIndex >= Object.values(this.currentCategory.category.pages).length) {
+                nextPageIndex = 0
+                nextCategoryIndex++
+            }
+            if (nextCategoryIndex >= categories.length) nextCategoryIndex = 0
+
+            nextPage = Object.values(categories[nextCategoryIndex])[nextPageIndex]
+            await this.update(interaction, nextPage)
+        },
+
+        /**
+         * Jumps to last page in category.
+         */
+        backPageInCategory: async (interaction: BaseInteraction) => {
+            if (!this.currentPage || !this.currentCategory) throw new Error(`No anchor was initialized on a this pageMenu: [${this.data.id}].`)
+
+            let nextIndex = this.currentPage.index - 1
+            if (nextIndex < 0) nextIndex = Object.values(this.currentCategory.category.pages).length - 1
+
+            const nextPage = Object.values(this.currentCategory.category.pages)[nextIndex]
+            await this.update(interaction, nextPage)
+        },
+
+
+        /**
+         * Jumps to last page in category and skips to previous category if at the end of the current category.
+         * @param skipCategory Index or id of category that are skipped.
+         */
+        absoluteBack: async (interaction: BaseInteraction, skipCategory?: (number | string)[]) => {
+            if (!this.currentPage || !this.currentCategory || !this.data.categories) throw new Error(`No anchor was initialized on a this pageMenu: [${this.data.id}].`)
+
+            const categories = Object.values(this.data.categories)
+            let nextCategoryIndex = this.currentCategory.index
+            let nextPageIndex = this.currentPage.index - 1
+            let nextPage = undefined
+
+            // Skip category?
+            if (skipCategory && nextCategoryIndex in skipCategory) nextCategoryIndex--
+            if (skipCategory && Object.values(categories[nextCategoryIndex])[nextPageIndex].data.id in skipCategory) nextCategoryIndex--
+
+            if (nextPageIndex < 0) {
+                nextCategoryIndex--
+                nextPageIndex = Object.values(categories[nextCategoryIndex]).length - 1
+            }
+            if (nextCategoryIndex < 0) nextCategoryIndex = categories.length - 1
+
+            nextPage = Object.values(categories[nextCategoryIndex])[nextPageIndex]
+            await this.update(interaction, nextPage)
+        },
+
+        // TODO: Future NextCategory Button to access Pages from Different Categories
+        // TODO: Future BackCategory Button to access Pages from Different Categories
     }
 }

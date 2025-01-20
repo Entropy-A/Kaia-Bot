@@ -15,7 +15,7 @@ export interface Commands {
 export const commands: Commands = {
     // Register categories:
     categories: new Collection<string, CommandCategory>()
-        .set(debug.name, debug),
+        .set(debug.id, debug),
 
     /**
      * Searches for command with a given name.
