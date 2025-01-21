@@ -1,4 +1,6 @@
 export enum Colors {
-    error = 0xff0000,
-    debug = 0xd4ac0d,
+    error = 0xad514e,
+    gray = 0x878181,
+    darkGray = 0x24252a,
+    blue = 0x505ccd,
 }

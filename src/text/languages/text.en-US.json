@@ -34,7 +34,7 @@
     },
 
     "commands":{
-        "categorys": {
+        "categories": {
             "general": {
                 "name": "General",
                 "description": "> Verily, no additional particulars are provided."
@@ -52,9 +52,9 @@
         },
 
         "ping": {
-            "commandDescription": "Let us witness how swiftly Ranni doth react to thy shot.",
+            "description": "Let us witness how swiftly Ranni doth react to thy shot.",
             "detailedDescription": {
-                "title": "Ping",
+                "title": "/PING",
                 "description": "Showeth thee how long I needeth to devote myself unto thee.",
                 "syntax": "`/ping`",
                 "returns": "> The present reaction time of Ranni, in units of \"miliseconds\" (ms)."
@@ -69,15 +69,13 @@
         },
 
         "help": {
-            "commandDescription": "Presenteth a list of commands anon.",
+            "description": "Presenteth a list of commands anon.",
             "detailedDescription": {
-                "title": "Help",
+                "title": "/HELP",
                 "description": "Showeth thee this page.",
                 "syntax": "`/help`",
                 "returns": "> A list of all the perks that Ranni doth bestow."
             },
-
-            "selectMenuPlaceholder": "Choose a command for further elucidation",
 
             "menu": {
                 "title": "What dost thou inquire?",
@@ -85,18 +83,20 @@
                 "credits": "Developed by **ENTROPY A** [*](https://github.com/Entropy-A)"
             },
 
-            "commandFieldNames":{
+            "detailedInfoPage": {
+                "title": "Here hast thou that which thou sought.",
                 "syntax": "Syntax",
-                "returns": "Returns"
+                "returns": "Returns",
+                "footer": "[] [[]]([]) ``[] / []``"
             },
-            "commandTitle": "Here hast thou that which thou sought.",
-            "commandFooter": "**Category:** [[]]([]) | **Command:** **[]** / []"
+
+            "selectMenuPlaceholder": "Choose a command for further elucidation"
         },
 
         "play": {
-            "commandDescription": "Performeth any song thou dost request.",
+            "description": "Performeth any song thou dost request.",
             "detailedDescription": {
-                "title": "Play",
+                "title": "/PLAY",
                 "description": "Plays any song thou dost enter in the box. Thou mayest offer either the `name` or a `link` to the song.\n**YouTube**, **Spotify** and more are supported.",
                 "syntax": "`/play [title]`",
                 "returns": "> Result of the search."
@@ -108,9 +108,9 @@
         },
 
         "skip": {
-            "commandDescription": "Skippeth to the next song in the queue.",
+            "description": "Skippeth to the next song in the queue.",
             "detailedDescription": {
-                "title": "Skip",
+                "title": "/SKIP",
                 "description": "Skippeth to the next song in the queue.",
                 "syntax": "`/skip`",
                 "returns": "> Next song."
@@ -121,9 +121,9 @@
         },
 
         "pause": {
-            "commandDescription": "Holdeth the melody to take thy rest.",
+            "description": "Holdeth the melody to take thy rest.",
             "detailedDescription": {
-                "title": "Pause",
+                "title": "/PAUSE",
                 "description": "Holdeth the melody to take thy rest.",
                 "syntax": "`/pause`",
                 "returns": "> Pauses song."
@@ -133,9 +133,9 @@
         },
 
         "resume": {
-            "commandDescription": "Begin again the current melody.",
+            "description": "Begin again the current melody.",
             "detailedDescription": {
-                "title": "Resume",
+                "title": "/RESUME",
                 "description": "Begin again the current melody.",
                 "syntax": "`/resume`",
                 "returns": "> Resumes song."
@@ -145,9 +145,9 @@
         },
 
         "remind": {
-            "commandDescription": "Starts the reminders editing mode.",
+            "description": "Starts the reminders editing mode.",
             "detailedDescription": {
-                "title": "Remind",
+                "title": "/REMIND",
                 "description": "Starts the reminders editing mode. the interface can be used to edit current reminders and add new ones.",
                 "syntax": "`/remind`",
                 "returns": "> Reminders menu."

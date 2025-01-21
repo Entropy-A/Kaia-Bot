@@ -2,7 +2,6 @@ import {z} from "zod";
 
 export const textDataSchema = z.object({
     error: z.object({
-
         embedLayout: z.object({
             description: z.string(),
             cause: z.string(),
@@ -57,7 +56,7 @@ export const textDataSchema = z.object({
     }),
 
     commands: z.object({
-        categorys: z.object({
+        categories: z.object({
             general: z.object({
                 name: z.string(),
                 description: z.string(),
@@ -73,7 +72,7 @@ export const textDataSchema = z.object({
         }),
 
         ping: z.object({
-            commandDescription: z.string(),
+            description: z.string(),
             detailedDescription: z.object({
                 title: z.string(),
                 description: z.string(),
@@ -89,7 +88,7 @@ export const textDataSchema = z.object({
         }),
 
         help: z.object({
-            commandDescription: z.string(),
+            description: z.string(),
             detailedDescription: z.object({
                 title: z.string(),
                 description: z.string(),
@@ -97,24 +96,24 @@ export const textDataSchema = z.object({
                 returns: z.string()
             }),
 
-            selectMenuPlaceholder: z.string(),
-
             menu: z.object({
                 title: z.string(),
                 description: z.string(),
+                credits: z.string(),
             }),
 
-            commandFieldNames: z.object({
+            detailedInfoPage: z.object({
+                title: z.string(),
                 syntax: z.string(),
-                returns: z.string()
+                returns: z.string(),
+                footer: z.string()
             }),
 
-            commandTitle: z.string(),
-            commandFooter: z.string()
+            selectMenuPlaceholder: z.string(),
         }),
 
         play: z.object({
-            commandDescription: z.string(),
+            description: z.string(),
             detailedDescription: z.object({
                 title: z.string(),
                 description: z.string(),
@@ -127,7 +126,7 @@ export const textDataSchema = z.object({
         }),
 
         skip: z.object({
-            commandDescription: z.string(),
+            description: z.string(),
             detailedDescription: z.object({
                 title: z.string(),
                 description: z.string(),
@@ -140,7 +139,7 @@ export const textDataSchema = z.object({
         }),
 
         pause: z.object({
-            commandDescription: z.string(),
+            description: z.string(),
             detailedDescription: z.object({
                 title: z.string(),
                 description: z.string(),
@@ -152,7 +151,7 @@ export const textDataSchema = z.object({
         }),
 
         resume: z.object({
-            commandDescription: z.string(),
+            description: z.string(),
             detailedDescription: z.object({
                 title: z.string(),
                 description: z.string(),
@@ -164,7 +163,7 @@ export const textDataSchema = z.object({
         }),
 
         remind: z.object({
-            commandDescription: z.string(),
+            description: z.string(),
             detailedDescription: z.object({
                 title: z.string(),
                 description: z.string(),

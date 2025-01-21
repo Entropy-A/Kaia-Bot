@@ -1,14 +1,14 @@
 import {CommandCategory, CommandTypes} from "../types.js";
 import {text} from "../../text/loadText.js"
 import {Collection} from "discord.js";
-import {ping} from "./ping.js";
+import {help} from "./help.js";
 import {Emojis} from "../../config/index.js";
 
 export default new CommandCategory ({
-    id: "debug",
-    name: text.commands.categories.debug.name,
+    id: "general",
+    name: text.commands.categories.general.name,
     commands: new Collection<string, CommandTypes>()
-        .set(ping.data.name, ping),
-    emoji: Emojis.debugIcon, // TODO: Custom
-    description: text.commands.categories.debug.description,
+        .set(help.data.name, help),
+    emoji: Emojis.generalIcon, // TODO: Custom
+    description: text.commands.categories.general.description,
 })

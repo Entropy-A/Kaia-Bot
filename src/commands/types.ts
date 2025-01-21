@@ -21,7 +21,7 @@ type CommandInteractionMap<D extends ApplicationCommandData> =
     never
 
 // TODO: maybe explain other types of command like messageContextCommand
-interface CommandDescription {
+interface CommandDetailedDescription {
     title: LocaleText,
     description: LocaleText,
     syntax: LocaleText,
@@ -32,7 +32,7 @@ export type CommandCallback<I extends CommandInteraction> = Callback<Awaitable<u
 
 interface CommandData<D extends ApplicationCommandData> {
     data: D,
-    description: CommandDescription,
+    detailedDescription: CommandDetailedDescription,
     icon: Images,
     color: Colors,
     callback: CommandCallback<CommandInteractionMap<D>>
@@ -55,7 +55,7 @@ export class Command<D extends ApplicationCommandData> implements CommandData<D>
     public readonly data: D;
     public readonly icon;
     public readonly color;
-    public readonly description
+    public readonly detailedDescription
     public readonly callback;
 
     /**
@@ -67,7 +67,7 @@ export class Command<D extends ApplicationCommandData> implements CommandData<D>
         this.type = data.data.type
         this.icon = data.icon
         this.color = data.color
-        this.description = data.description
+        this.detailedDescription = data.detailedDescription
         this.callback = data.callback
     }
 }

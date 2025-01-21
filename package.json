@@ -11,7 +11,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "nodemon",
-    "test": "ts-node src/utils/testFile.ts"
+    "test": "node --loader ts-node/esm src/utils/testFile.ts"
   },
   "devDependencies": {
     "@types/node": "^22.10.1",

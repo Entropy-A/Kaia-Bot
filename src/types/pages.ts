@@ -258,13 +258,14 @@ export interface PageMenuData {
     categories?: Record<string, PageMenuCategory>
 }
 
-interface PageMenuCategory {
+export interface PageMenuCategory {
     readonly id: string
     pages: Record<string, Page>
 }
 
-type DynamicEmbedUpdate = ((
-    page: Page
+export type DynamicEmbedUpdate = ((
+    page: Page,
+    menu: PageMenu
 ) => PageData["embeds"])
 
 export class PageMenu {
@@ -351,9 +352,15 @@ export class PageMenu {
     public getPage(key: string | Page): {page: Page, index: number } | undefined {
         if (!this.data.categories) return undefined
 
-        for (const [index, page] of Object.values(this.data.categories).flatMap(({pages}) => {return Object.values(pages)}).entries()) {
-            if (typeof key === "string" && page.data.id === key || key instanceof Page &&  page === key) return {index, page}
+        for (const pages of Object.values(this.data.categories).map(({pages}) => {return Object.values(pages)})) {
+            for (const [index, page] of pages.entries()) {
+                if (typeof key === "string" && page.data.id === key || key instanceof Page &&  page === key) return {index, page}
+            }
         }
+
+        /*for (const [index, page] of Object.values(this.data.categories).map(({pages}) => {return Object.values(pages)}).entries()) {
+            if (typeof key === "string" && page.data.id === key || key instanceof Page &&  page === key) return {index, page}
+        }*/
         return undefined
     }
 
@@ -416,7 +423,7 @@ export class PageMenu {
 
         // * Apply every callback on embed.
         for (const callback of this.dynamicEmbedUpdates) {
-            updatedPage.data.embeds = callback(page)
+            updatedPage.data.embeds = callback(page, this)
         }
         return updatedPage
     }
@@ -442,26 +449,27 @@ export class PageMenu {
          * Jumps to next page in category and skips to next category if at the end of the current category.
          * @param skipCategory Index or id of category that are skipped.
          */
-        absoluteNext: async (interaction: BaseInteraction, skipCategory?: (number | string)[]) => {
-            if (!this.currentPage || !this.currentCategory || !this.data.categories) throw new Error(`No anchor was initialized on a this pageMenu: [${this.data.id}].`)
-
-            const categories = Object.values(this.data.categories)
-            let nextCategoryIndex = this.currentCategory.index
-            let nextPageIndex = this.currentPage.index + 1
-            let nextPage = undefined
-
-            // Skip category?
-            if (skipCategory && nextCategoryIndex in skipCategory) nextCategoryIndex++
-            if (skipCategory && Object.values(categories[nextCategoryIndex])[nextPageIndex].data.id in skipCategory) nextCategoryIndex++
-
-            if (nextPageIndex >= Object.values(this.currentCategory.category.pages).length) {
-                nextPageIndex = 0
-                nextCategoryIndex++
+        absoluteNext: async (interaction: BaseInteraction, skipCategory?: number[]) => { // TODO: fix buttons
+            if (!this.currentPage || !this.currentCategory || !this.data.categories) {
+                throw new Error(`No anchor initialized in PageMenu: [${this.data.id}].`);
             }
-            if (nextCategoryIndex >= categories.length) nextCategoryIndex = 0
 
-            nextPage = Object.values(categories[nextCategoryIndex])[nextPageIndex]
-            await this.update(interaction, nextPage)
+            const categories = Object.values(this.data.categories);
+            let nextCategoryIndex = this.currentCategory.index;
+            let nextPageIndex = this.currentPage.index + 1;
+
+            if (nextPageIndex >= Object.values(categories[nextCategoryIndex].pages).length) {
+                nextPageIndex = 0;
+                nextCategoryIndex = (nextCategoryIndex + 1) % categories.length;
+            }
+
+            // Skip invalid categories/pages
+            while (skipCategory?.includes(nextCategoryIndex)) {
+                nextCategoryIndex = (nextCategoryIndex + 1) % categories.length;
+            }
+
+            const nextPage = Object.values(categories[nextCategoryIndex].pages)[nextPageIndex];
+            await this.update(interaction, nextPage);
         },
 
         /**
@@ -482,26 +490,25 @@ export class PageMenu {
          * Jumps to last page in category and skips to previous category if at the end of the current category.
          * @param skipCategory Index or id of category that are skipped.
          */
-        absoluteBack: async (interaction: BaseInteraction, skipCategory?: (number | string)[]) => {
+        absoluteBack: async (interaction: BaseInteraction, skipCategory?: number[]) => {
             if (!this.currentPage || !this.currentCategory || !this.data.categories) throw new Error(`No anchor was initialized on a this pageMenu: [${this.data.id}].`)
 
-            const categories = Object.values(this.data.categories)
-            let nextCategoryIndex = this.currentCategory.index
-            let nextPageIndex = this.currentPage.index - 1
-            let nextPage = undefined
-
-            // Skip category?
-            if (skipCategory && nextCategoryIndex in skipCategory) nextCategoryIndex--
-            if (skipCategory && Object.values(categories[nextCategoryIndex])[nextPageIndex].data.id in skipCategory) nextCategoryIndex--
+            const categories = Object.values(this.data.categories);
+            let nextCategoryIndex = this.currentCategory.index;
+            let nextPageIndex = this.currentPage.index - 1;
 
             if (nextPageIndex < 0) {
-                nextCategoryIndex--
-                nextPageIndex = Object.values(categories[nextCategoryIndex]).length - 1
+                nextPageIndex = Object.values(categories[nextCategoryIndex].pages).length - 1;
+                nextCategoryIndex = (nextCategoryIndex - 1) < 0 ? categories.length - 1 : nextCategoryIndex - 1;
             }
-            if (nextCategoryIndex < 0) nextCategoryIndex = categories.length - 1
 
-            nextPage = Object.values(categories[nextCategoryIndex])[nextPageIndex]
-            await this.update(interaction, nextPage)
+            // Skip invalid categories/pages
+            while (skipCategory?.includes(nextCategoryIndex)) {
+                nextCategoryIndex = (nextCategoryIndex - 1) < 0 ? categories.length - 1 : nextCategoryIndex - 1;
+            }
+
+            const nextPage = Object.values(categories[nextCategoryIndex].pages)[nextPageIndex];
+            await this.update(interaction, nextPage);
         },
 
         // TODO: Future NextCategory Button to access Pages from Different Categories

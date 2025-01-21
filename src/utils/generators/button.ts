@@ -21,13 +21,13 @@ export class ButtonGenerator extends ButtonBuilder {
     public static Back(data?: Data) {
         return this.create(data)
             .setStyle(ButtonStyle.Primary)
-            .setLabel("Back") //TODO Dynamic text in Future
+            .setEmoji(Emojis.arrowLeft)
     }
 
     public static Next(data?: Data) {
         return this.create(data)
             .setStyle(ButtonStyle.Primary)
-            .setEmoji("<:arrowRight:1231357089083817994>") // TODO Better
+            .setEmoji(Emojis.arrowRight)
     }
 
     public static newReminder(data?: Data) {

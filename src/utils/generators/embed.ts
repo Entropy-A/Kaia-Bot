@@ -28,7 +28,12 @@ export class EmbedGenerator extends EmbedBuilder {
             embed
                 .setAuthor({iconURL: Images.errorIcon, name: text.error.UNEXPECTED_ERROR.title.get(locale)})
                 .setDescription(text.error.UNEXPECTED_ERROR.message.get(locale))
+                .setImage(Images.blueScreen)
         }
         return embed
+    }
+
+    public static Command(color: Colors, icon: Images, title: string, data?: Data) {
+        return EmbedGenerator.create(data).setColor(color).setAuthor({name: title, iconURL: icon})
     }
 }
