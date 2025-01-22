@@ -80,7 +80,8 @@ interface CommandCategoryData {
     name: LocaleText,
     commands: Collection<string, CommandTypes>,
     description?: LocaleText,
-    emoji?: string
+    emoji?: string,
+    documentationLink?: string
 }
 /**
  * Class to further specify a group of commands.
@@ -95,6 +96,7 @@ export class CommandCategory implements CommandCategoryData{
     public readonly commands;
     public readonly description?;
     public readonly emoji?;
+    public readonly documentationLink?;
 
     constructor (data: CommandCategoryData) {
         this.id = data.id
@@ -102,7 +104,6 @@ export class CommandCategory implements CommandCategoryData{
         this.commands = data.commands
         this.description = data.description
         this.emoji = data.emoji
+        this.documentationLink = data.documentationLink
     }
 }
-
-// TODO: Collection of commands and stuff

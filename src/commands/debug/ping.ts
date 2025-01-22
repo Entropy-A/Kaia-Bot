@@ -25,8 +25,6 @@ const callback: CommandCallback<ChatInputCommandInteraction> = async ({interacti
 
         await anchor.update(interaction, pingPage(locale, pingValue))
 
-        throw new Error("g")
-
     } catch (error) {
         await handleError(interaction, error, logger)
     }

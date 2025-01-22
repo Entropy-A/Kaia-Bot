@@ -9,6 +9,6 @@ export default new CommandCategory ({
     name: text.commands.categories.debug.name,
     commands: new Collection<string, CommandTypes>()
         .set(ping.data.name, ping),
-    emoji: Emojis.debugIcon, // TODO: Custom
+    emoji: Emojis.debugIcon,
     description: text.commands.categories.debug.description,
 })

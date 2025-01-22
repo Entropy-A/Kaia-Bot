@@ -92,7 +92,7 @@ class PageAnchor {
     protected anchor?: Message | InteractionResponse
 
     constructor(public data: PageData) {
-        this.pageLogger = new StaticLogger(LoggerType.PAGE, this.data.id) // TODO: Fix logger, in menu always the main page
+        this.pageLogger = new StaticLogger(LoggerType.PAGE, this.data.id) // TODO: Fix logger, in menu maybe always the main page??
         this.applyColor()
     }
 
@@ -147,9 +147,14 @@ class PageAnchor {
 
         switch (methode) {
             case AnchorHandling.send:
-                if (!interaction.isRepliable()) break
-                if (interaction.replied) this.setCollector(await interaction.editReply(updatePayload()), interaction, timeout)
-                else this.setCollector(await interaction.reply(replyPayload()), interaction, timeout)
+                try {
+                    if (!interaction.isRepliable()) break
+                    if (interaction.replied) this.setCollector(await interaction.editReply(updatePayload()), interaction, timeout)
+                    else this.setCollector(await interaction.reply(replyPayload()), interaction, timeout)
+                } catch {
+                    this.pageLogger.info("Force update Page. Maybe fix required.")
+                    this.anchor?.edit(updatePayload()) // ! Not tested
+                }
                 break;
 
             case AnchorHandling.followUp:
@@ -162,6 +167,7 @@ class PageAnchor {
                     if (interaction.isMessageComponent()) await interaction.update(updatePayload())
                     else if (interaction.isRepliable()) await interaction.editReply(updatePayload())
                 } catch {
+                    this.pageLogger.info("Force update Page. Maybe fix required.")
                     this.anchor?.edit(updatePayload()) // ! Not tested
                 }
                 break;
@@ -429,8 +435,6 @@ export class PageMenu {
     }
 
     // Utils:
-
-    // TODO: Try to optimize
     defaultButtonCallbacks = {
         /**
          * Jumps to next page in category.
@@ -449,7 +453,7 @@ export class PageMenu {
          * Jumps to next page in category and skips to next category if at the end of the current category.
          * @param skipCategory Index or id of category that are skipped.
          */
-        absoluteNext: async (interaction: BaseInteraction, skipCategory?: number[]) => { // TODO: fix buttons
+        absoluteNext: async (interaction: BaseInteraction, skipCategory?: number[]) => {
             if (!this.currentPage || !this.currentCategory || !this.data.categories) {
                 throw new Error(`No anchor initialized in PageMenu: [${this.data.id}].`);
             }
@@ -510,8 +514,5 @@ export class PageMenu {
             const nextPage = Object.values(categories[nextCategoryIndex].pages)[nextPageIndex];
             await this.update(interaction, nextPage);
         },
-
-        // TODO: Future NextCategory Button to access Pages from Different Categories
-        // TODO: Future BackCategory Button to access Pages from Different Categories
     }
 }

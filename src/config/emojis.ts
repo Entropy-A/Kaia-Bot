@@ -5,8 +5,9 @@ export enum Emojis {
 
     arrowRight = "<:arrowRight:1331398516165316749>",
     arrowLeft = "<:arrowLeft:1331398792242663455>",
+    home = "<:home:1331546601080229909>",
 
-    botWebsite = "🌐",
-    invite = "👋",
-    dcServer = "<:discord:1237125712108982473>",
+    botWebsite = "<:website:1331404313418797056>",
+    invite = "<:add:1331404747764138083>",
+    dcServer = "👾",
 }

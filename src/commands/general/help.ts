@@ -23,7 +23,6 @@ const data: ChatInputApplicationCommandData = {
 }
 
 const callback: CommandCallback<ChatInputCommandInteraction> = async ({interaction, logger}) => {
-
     try {
         const mainPage_ = mainPage(interaction.locale);
         const detailedHelpPages_ = detailedHelpPages(interaction.locale);
@@ -33,7 +32,7 @@ const callback: CommandCallback<ChatInputCommandInteraction> = async ({interacti
             generator: selectMenuGenerator(interaction.locale),
             callback: async ({interaction}) => {
                 const newPage = menu.getPage(interaction.values[0])?.page
-                if (!newPage) return // TODO: future send error page
+                if (!newPage) return handleError(interaction, new Error(`Did not find command with name: [${interaction.values[0]}] from stringSelect.`), logger)
 
                 await menu.update(interaction, newPage)
             }
@@ -143,18 +142,20 @@ function dynamicEmbedUpdate(locale: LocaleString): DynamicEmbedUpdate {
         const categoryInfo = menu.getCategoryByPage(page)
         if (!pageInfo || !categoryInfo || page.data.id === "mainPage") return page.data.embeds
 
-        const emoji = commands.getCategory(categoryInfo.category.id)?.emoji ?? ""
+        const category_ = commands.getCategory(categoryInfo.category.id)
+
+        const emoji = category_?.emoji ?? ""
         const index = pageInfo.index + 1
         const category = categoryInfo.category
-        const categoryLink = "https://www.youtube.com/watch?v=d43lJsK7Kvo" // TODO: CHANGE FUTURE WEBSITE DOCUMENTATION
+        const categoryLink = category_?.documentationLink ?? "https://www.youtube.com/watch?v=d43lJsK7Kvo"
 
         const name = "\u200B"
         const value = text.commands.help.detailedInfoPage.footer.insertInMessage([
             emoji,
             (text.commands.categories as any)[category.id].name.get(locale),
-            categoryLink, // TODO: cahnge that link is in language file
+            categoryLink,
             index.toString(),
-            Object.values(category.pages).length.toString() // TODO add more to footer maybe
+            Object.values(category.pages).length.toString()
         ], locale)
 
         // That the fields don't get added multiple times if called repeatedly.

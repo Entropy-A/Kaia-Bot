@@ -9,6 +9,6 @@ export default new CommandCategory ({
     name: text.commands.categories.general.name,
     commands: new Collection<string, CommandTypes>()
         .set(help.data.name, help),
-    emoji: Emojis.generalIcon, // TODO: Custom
+    emoji: Emojis.generalIcon,
     description: text.commands.categories.general.description,
 })

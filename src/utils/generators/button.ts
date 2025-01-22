@@ -8,7 +8,7 @@ export class ButtonGenerator extends ButtonBuilder {
     public static Menu(data?: Data) {
         return this.create(data)
             .setStyle(ButtonStyle.Secondary)
-            .setLabel("Menu") //TODO Dynamic text in Future
+            .setEmoji(Emojis.home)
     }
 
     public static Link(label: string, url: string, emoji?: Emojis, data?: Data) {

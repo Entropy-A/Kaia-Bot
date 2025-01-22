@@ -29,7 +29,7 @@
 
         "UNEXPECTED_ERROR": {
             "title": "Unexpected Error",
-            "message": "An error occured in an unkown location. Please send a **ticket** with further context to assist fixing the problem.\n**Thank you :)**"
+            "message": "An error occurred in an unknown location. Please send a **ticket** with further context to assist fixing the problem.\n**Sorry for the inconvenience :(**"
         }
     },
 

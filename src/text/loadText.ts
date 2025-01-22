@@ -4,12 +4,9 @@ import {z, ZodError} from "zod";
 import {getDeepestElements, parse, syslog} from "../utils/index.js";
 import {textDataSchema} from "./textDataSchema.js";
 
-// TODO: Rewatch if everything works and improve coe (errror handling)
-// Create the Zod schema
-
-
+// Create type from the Zod schema.
 type InferredType = z.infer<typeof textDataSchema>;
-// Recursively map the type so that "string" gets replaced with "LocaleText"
+// Recursively map the type so that "string" gets replaced with "LocaleText".
 type ReplaceStringWithLocaleText<T> = {
     [K in keyof T]: T[K] extends string | undefined ? LocaleText : T[K] extends Record<any, any> ? ReplaceStringWithLocaleText<T[K]> : T[K];
 };
