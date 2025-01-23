@@ -9,11 +9,12 @@ export enum Images {
     helpIcon  = "https://i.ibb.co/gjkY7Wv/waving-hand-24dp-878181-FILL0-wght400-GRAD0-opsz24.png",
 
     playIcon = "https://i.ibb.co/YWRpD94/play-arrow-24dp-878181-FILL0-wght400-GRAD0-opsz24.png",
-    addQueueIcon = "https://i.ibb.co/zGM3kKq/add-queue-icon.png",
-    pauseIcon = "https://i.postimg.cc/vTDDtDzS/pause-icon.png",
-    skipIcon = "https://i.ibb.co/R28RWgP/skip-icon.png",
-    leaveIcon = "https://uploads.dailydot.com/2023/12/skeletor-meme.jpg?q=65&auto=format&w=1600&ar=2:1&fit=crop",
-    remindIcon = "https://cdn-icons-png.flaticon.com/512/8476/8476682.png",
+    addQueueIcon = "",
+    pauseIcon = "",
+    resumeIcon = "",
+    skipIcon = "",
+    leaveIcon = "",
+    remindIcon = "",
 
     avatar = "https://cdn.discordapp.com/attachments/630120841975300145/1314373231557214299/514f0c855032d8e87ee04c726a8b55a1.jpg?ex=67917f76&is=67902df6&hm=e4bfd4c162691dc58dd40a647e117536fde6c1f920895b2217635c6fadc96c20&",     // TODO: Change to actual theme
 }

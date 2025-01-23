@@ -1,4 +1,4 @@
-import {Client} from "discord.js";
+import {Client, GatewayIntentBits} from "discord.js";
 import {ClientIntents, ClientPartials} from "../config/index.js";
 import {HooksRegistry, Symbols} from "../hooks/registry.js";
 import {Keys} from "../keys/keys.js";

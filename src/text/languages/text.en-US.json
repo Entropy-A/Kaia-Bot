@@ -79,7 +79,7 @@
 
             "menu": {
                 "title": "What do you wanna know?",
-                "description": "Hey I'm **Kaia** and here you find everything you need to know about me :D \n If you don't know where to start you can use the bar below and click through all the commands.",
+                "description": "Hey I'm **Kaia** and here you find everything you need to know about me :D \n If you don't know where to start you can use the ``select bar`` below and click through all the commands.",
                 "credits": "Developed by **ENTROPY A** [*](https://github.com/Entropy-A)"
             },
 
@@ -133,7 +133,7 @@
         },
 
         "resume": {
-            "description": "LET'S DANCE!",
+            "description": "I will resume singing, yeah!",
             "detailedDescription": {
                 "title": "/RESUME",
                 "description": "Enough break. I will continue our karaoke session.",

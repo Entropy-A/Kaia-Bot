@@ -5,30 +5,14 @@ import _ from "underscore";
 import {Command, CommandCallback} from "../index.js";
 import {Page} from "../../types/pages.js";
 import {EmbedGenerator, handleError} from "../../utils/index.js";
-import {
-    createAudioPlayer,
-    createAudioResource,
-    getVoiceConnection,
-    joinVoiceChannel,
-    NoSubscriberBehavior
-} from "@discordjs/voice";
-
-import playdl from 'play-dl';
 
 const color = Colors.gray
-const icon = Images.playIcon
-const detailedDescription = text.commands.play.detailedDescription
+const icon = Images.skipIcon
+const detailedDescription = text.commands.skip.detailedDescription
 const data: ChatInputApplicationCommandData = {
-    name: "play",
-    description: text.commands.play.description.get("en-US"),
-    descriptionLocalizations: _.omit(text.commands.play.description.locals, "en-US"),
-    options : [{
-        name: "title",
-        description: text.commands.play.optionDescription.get("en-US"),
-        descriptionLocalizations: _.omit(text.commands.play.optionDescription.locals, "en-US"),
-        type: 3,
-        required: true,
-    }],
+    name: "skip",
+    description: text.commands.skip.description.get("en-US"),
+    descriptionLocalizations: _.omit(text.commands.skip.description.locals, "en-US"),
     type: 1
 }
 const callback: CommandCallback<ChatInputCommandInteraction> = async ({interaction, logger}) => {
@@ -41,7 +25,7 @@ const callback: CommandCallback<ChatInputCommandInteraction> = async ({interacti
 }
 
 // ! Command export.
-export const play = new Command({data, icon, color, detailedDescription, callback})
+export const skip = new Command({data, icon, color, detailedDescription, callback})
 
 function CURRENTLYNOTAVAILABLE() {
     return new Page({

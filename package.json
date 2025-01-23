@@ -22,9 +22,12 @@
     "typescript": "^5.7.2"
   },
   "dependencies": {
+    "@discordjs/voice": "^0.18.0",
     "cross-env": "^7.0.3",
     "discord.js": "^14.16.3",
     "dotenv": "^16.4.7",
+    "libsodium-wrappers": "^0.7.15",
+    "play-dl": "^1.9.7",
     "underscore": "^1.13.7",
     "zod": "^3.23.8"
   }

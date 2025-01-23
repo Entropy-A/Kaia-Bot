@@ -129,11 +129,12 @@ class PageAnchor {
 
     protected async handleInteractions(interaction: BaseInteraction, methode: AnchorHandling, timeout?: number, ephemeral?: boolean) {
         // * Sending Page.
+        const flags = ephemeral ? "Ephemeral": undefined
         const replyPayload = (): BaseMessageOptions | InteractionReplyOptions => {
             return {
                 embeds: this.createEmbedArray(),
                 components: this.createActionRows(interaction),
-                ephemeral
+                flags
             }
         }
 
