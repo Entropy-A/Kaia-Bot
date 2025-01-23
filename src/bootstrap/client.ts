@@ -6,7 +6,6 @@ import {syslog} from "../utils/index.js";
 import {loadEvents, events} from "../events/index.js"
 import {commands, registerCommands} from "../commands/index.js";
 
-
 const client = new Client({
     intents: ClientIntents,
     partials: ClientPartials,

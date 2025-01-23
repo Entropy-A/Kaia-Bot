@@ -3,9 +3,10 @@ import {text} from "../../text/loadText.js"
 import {Collection} from "discord.js";
 import {help} from "./help.js";
 import {Emojis} from "../../config/index.js";
+import {CommandCategoryIds} from "../index.js";
 
 export default new CommandCategory ({
-    id: "general",
+    id: CommandCategoryIds.general,
     name: text.commands.categories.general.name,
     commands: new Collection<string, CommandTypes>()
         .set(help.data.name, help),

@@ -14,6 +14,12 @@ import {
 import {Callback} from "../types/index.js";
 import {Colors, Images} from "../config/index.js";
 
+export enum CommandCategoryIds {
+    debug = "debug",
+    general = "general",
+    music = "music",
+}
+
 type CommandInteractionMap<D extends ApplicationCommandData> =
     D extends ChatInputApplicationCommandData ? ChatInputCommandInteraction :
     D extends MessageApplicationCommandData ? MessageContextMenuCommandInteraction :
@@ -76,7 +82,7 @@ export type CommandTypes = Command<ChatInputApplicationCommandData> | Command<Us
 
 
 interface CommandCategoryData {
-    id: string,
+    id: CommandCategoryIds,
     name: LocaleText,
     commands: Collection<string, CommandTypes>,
     description?: LocaleText,

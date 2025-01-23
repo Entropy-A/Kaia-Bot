@@ -6,6 +6,7 @@ export * from "./handleCommands.js"
 
 import debug from "./debug/index.js"
 import general from "./general/index.js";
+import music from "./music/index.js";
 
 export interface Commands {
     categories: Collection<string, CommandCategory>,
@@ -17,6 +18,7 @@ export const commands: Commands = {
     // Register categories:
     categories: new Collection<string, CommandCategory>()
         .set(general.id, general)
+        .set(music.id, music)
 
         .set(debug.id, debug),
 

@@ -9,7 +9,7 @@
             "message": "Bot is not connected to any voice."
         },
         "failedCommand": {
-            "message": "An error occured while executing this command!"
+            "message": "An error occurred while executing this command!"
         },
         "userNotConnectedToVoice": {
             "message": "Join a voice to use this command!"
@@ -18,13 +18,13 @@
             "message": "You must be in the same voice as the bot to use this command!"
         },
         "alreadyPaused": {
-            "message": "Bot already paused."
+            "message": "Bot already paused!"
         },
         "alreadyResumed": {
-            "message": "Bot already resumed."
+            "message": "Bot already resumed!"
         },
         "couldNotSkip": {
-            "message": "Could not skip any song."
+            "message": "There is no song to be skipped!"
         },
 
         "UNEXPECTED_ERROR": {
@@ -37,81 +37,81 @@
         "categories": {
             "general": {
                 "name": "General",
-                "description": "> Verily, no additional particulars are provided."
+                "description": "> Commands for basic applications."
             },
 
             "debug": {
                 "name": "Debug",
-                "description": "> Forsooth, meant to troubleshoot the automaton in case aught is awry or doth linger overmuch."
+                "description": "> Commands to debug **me** and find causes of several inconveniences. Use it if I don't respond as expected!"
             },
 
             "music": {
                 "name": "Music",
-                "description": "> A broad array of behests thou may employ to behold mine exquisite musical prowess."
+                "description": "> Commands dedicated to playing music. Let me show you what I got!"
             }
         },
 
         "ping": {
-            "description": "Let us witness how swiftly Ranni doth react to thy shot.",
+            "description": "Let us play ping pong and see how fast i can react!",
             "detailedDescription": {
                 "title": "/PING",
-                "description": "Showeth thee how long I needeth to devote myself unto thee.",
+                "description": "Shows API (me) reaction time.",
                 "syntax": "`/ping`",
-                "returns": "> The present reaction time of Ranni, in units of \"miliseconds\" (ms)."
+                "returns": "> Time it takes to answer command in \"miliseconds\" (ms)."
             },
 
-            "title": "*Pong* - Verily, a splendid strike!",
+            "title": "*Pong* - Nice shot!",
             "message": {
-                "close": "By my troth! How swiftly thou didst strike... I had but a moment of [] to parry thy blow.",
-                "normal": "Hoho, didst thou behold that? It took me a whopping [] to react.\n > That was close. >-<",
-                "slow": "Goaugh... Oh WAIT! I just dozed off. Wow, [] is way too much. I'll endeavor to concentrate more!\n > *Mayhap I should procure a coffee or some such?*"
+                "close": "Wow I'm in best form... [] is really quick.",
+                "normal": "Damn I'm really getting tired... :sleepy: I took [] to react.\n > That was close. >-<",
+                "slow": ":sleeping: Goaugh... Oh WAIT! I just dozed off. Shit, [] is way too much. This should not happen\n > A white monster would be nice..."
             }
         },
 
         "help": {
-            "description": "Presenteth a list of commands anon.",
+            "description": "Shows list of commands with further information.",
             "detailedDescription": {
                 "title": "/HELP",
-                "description": "Showeth thee this page.",
+                "description": "Opens this page.",
                 "syntax": "`/help`",
-                "returns": "> A list of all the perks that Ranni doth bestow."
+                "returns": "> List of all the perks I bring to the party."
             },
 
             "menu": {
-                "title": "What dost thou inquire?",
-                "description": "If thou art uncertain of what thou seek, a bar below shall display all commands enumerated.",
+                "title": "What do you wanna know?",
+                "description": "Hey I'm **Kaia** and here you find everything you need to know about me :D \n If you don't know where to start you can use the bar below and click through all the commands.",
                 "credits": "Developed by **ENTROPY A** [*](https://github.com/Entropy-A)"
             },
 
             "detailedInfoPage": {
-                "title": "Here hast thou that which thou sought.",
+                "title": "Some more detailed information.",
                 "syntax": "Syntax",
                 "returns": "Returns",
                 "footer": "[] [[]]([]) ``[] / []``"
             },
 
-            "selectMenuPlaceholder": "Choose a command for further elucidation"
+            "selectMenuPlaceholder": "Choose a command for more info..."
         },
 
         "play": {
-            "description": "Performeth any song thou dost request.",
+            "description": "I will sing any song you want king.",
             "detailedDescription": {
                 "title": "/PLAY",
-                "description": "Plays any song thou dost enter in the box. Thou mayest offer either the `name` or a `link` to the song.\n**YouTube**, **Spotify** and more are supported.",
+                "description": "Gives me a mic to sing the requested song. You can either provide a `name` or a `link` to the song. **YouTube**, **Spotify** and I have them all :sunglasses:",
                 "syntax": "`/play [title]`",
                 "returns": "> Result of the search."
             },
 
             "optionDescription": "Title / URL",
-            "playerStart": "Make thee ready to revel!",
+            "playerStart": "ARE YOU READY TO PARTY???",
             "addToQueue": "Added to queue!"
         },
 
         "skip": {
-            "description": "Skippeth to the next song in the queue.",
+            "description": "I will sing the next song in queue.",
             "detailedDescription": {
                 "title": "/SKIP",
-                "description": "Skippeth to the next song in the queue.",
+                "description": "Taps me on the shoulder. I will sing the next song in queue.",
                 "syntax": "`/skip`",
                 "returns": "> Next song."
             },
@@ -121,22 +121,22 @@
         },
 
         "pause": {
-            "description": "Holdeth the melody to take thy rest.",
+            "description": "Let me take a break from singing.",
             "detailedDescription": {
                 "title": "/PAUSE",
-                "description": "Holdeth the melody to take thy rest.",
+                "description": "Gives me a moment so stop singing. Maybe I'll even take a sip.",
                 "syntax": "`/pause`",
                 "returns": "> Pauses song."
             },
 
-            "title": "Paused playing."
+            "title": "Paused singing."
         },
 
         "resume": {
-            "description": "Begin again the current melody.",
+            "description": "LET'S DANCE!",
             "detailedDescription": {
                 "title": "/RESUME",
-                "description": "Begin again the current melody.",
+                "description": "Enough break. I will continue our karaoke session.",
                 "syntax": "`/resume`",
                 "returns": "> Resumes song."
             },

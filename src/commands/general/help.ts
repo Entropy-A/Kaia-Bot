@@ -173,7 +173,7 @@ function mainPage(locale: LocaleString): PageMenuCategory {
     // Menu page with bottom to fix Size.
     const menuEmbed = EmbedGenerator.Command(color, icon, text.commands.help.menu.title.get(locale), {
             description: text.commands.help.menu.description.get(locale),
-            thumbnail: {url: Images.neutralAvatar},
+            thumbnail: {url: Images.avatar},
         }
     )
 
@@ -219,7 +219,7 @@ function detailedHelpPages(locale: LocaleString): PageMenuCategory[] {
             pages[command.data.name] = new Page({
                 id: command.data.name,
                 embeds: [EmbedGenerator.Command(color, icon, text.commands.help.detailedInfoPage.title.get(locale), {
-                    // * thumbnail: {url: Images.ranni_neutral_avatar},
+                    // * thumbnail: {url: Images.avatar},
                     title,
                     description: `> ${description}`,
                     fields: [
