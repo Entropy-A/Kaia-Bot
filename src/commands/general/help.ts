@@ -109,7 +109,7 @@ const callback: CommandCallback<ChatInputCommandInteraction> = async ({interacti
 }
 
 // ! Command export.
-export const help = new Command({data, icon, color, detailedDescription, callback})
+export default new Command({data, icon, color, detailedDescription, callback})
 
 function selectMenuGenerator(locale: LocaleString) {
     // TODO Add list for other kinds of commands like userCommand. / Add type of command to help

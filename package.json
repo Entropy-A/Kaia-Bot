@@ -27,6 +27,8 @@
     "discord.js": "^14.16.3",
     "dotenv": "^16.4.7",
     "libsodium-wrappers": "^0.7.15",
+    "mongodb": "^6.12.0",
+    "mongoose": "^8.9.5",
     "play-dl": "^1.9.7",
     "underscore": "^1.13.7",
     "zod": "^3.23.8"

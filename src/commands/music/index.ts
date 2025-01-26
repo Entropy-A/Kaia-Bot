@@ -4,10 +4,10 @@ import {Collection} from "discord.js";
 import {Emojis} from "../../config/index.js";
 import {CommandCategoryIds} from "../index.js";
 
-import {play} from "./play.js";
-import {pause} from "./pause.js";
-import {resume} from "./resume.js";
-import {skip} from "./skip.js";
+import play from "./play.js";
+import pause from "./pause.js";
+import resume from "./resume.js";
+import skip from "./skip.js";
 
 export default new CommandCategory ({
     id: CommandCategoryIds.music,

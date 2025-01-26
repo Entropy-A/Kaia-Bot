@@ -31,7 +31,7 @@ const callback: CommandCallback<ChatInputCommandInteraction> = async ({interacti
 }
 
 // ! Command export.
-export const ping = new Command({data, icon, color, detailedDescription, callback})
+export default new Command({data, icon, color, detailedDescription, callback})
 
 function checkPing(locale: LocaleString) {
     return new Page({

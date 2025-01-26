@@ -41,7 +41,7 @@ const callback: CommandCallback<ChatInputCommandInteraction> = async ({interacti
 }
 
 // ! Command export.
-export const play = new Command({data, icon, color, detailedDescription, callback})
+export default new Command({data, icon, color, detailedDescription, callback})
 
 function CURRENTLYNOTAVAILABLE() {
     return new Page({

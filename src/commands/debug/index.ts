@@ -1,9 +1,10 @@
 import {CommandCategory, CommandTypes} from "../types.js";
 import {text} from "../../text/loadText.js"
 import {Collection} from "discord.js";
-import {ping} from "./ping.js";
 import {Emojis} from "../../config/index.js";
 import {CommandCategoryIds} from "../index.js";
+
+import ping from "./ping.js";
 
 export default new CommandCategory ({
     id: CommandCategoryIds.debug,

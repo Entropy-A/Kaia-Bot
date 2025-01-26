@@ -2,7 +2,8 @@ export enum LoggerType {
     SYSTEM = "SYSTEM",
     COMMAND = "COMMAND",
     EVENT = "EVENT",
-    PAGE = "PAGE"
+    PAGE = "PAGE",
+    MONGODB = "MONGODB",
 }
 
 /**
