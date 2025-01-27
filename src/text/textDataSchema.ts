@@ -69,6 +69,10 @@ export const textDataSchema = z.object({
                 name: z.string(),
                 description: z.string(),
             }),
+            statistics: z.object({
+                name: z.string(),
+                description: z.string(),
+            })
         }),
 
         ping: z.object({
@@ -161,6 +165,24 @@ export const textDataSchema = z.object({
 
             title: z.string()
         }),
+
+        statistics: z.object({
+            description: z.string(),
+            detailedDescription: z.object({
+                title: z.string(),
+                description: z.string(),
+                syntax: z.string(),
+                returns: z.string(),
+            }),
+
+        }),
+
+
+
+
+
+
+
 
         remind: z.object({
             description: z.string(),

@@ -18,6 +18,7 @@ export enum CommandCategoryIds {
     debug = "debug",
     general = "general",
     music = "music",
+    statistics = "statistics",
 }
 
 type CommandInteractionMap<D extends ApplicationCommandData> =

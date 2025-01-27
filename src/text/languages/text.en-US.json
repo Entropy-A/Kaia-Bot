@@ -48,6 +48,11 @@
             "music": {
                 "name": "Music",
                 "description": "> Commands dedicated to playing music. Let me show you what I got!"
+            },
+
+            "statistics": {
+                "name": "Statistics",
+                "description": "> Commands to gain access to a database where you can store your statistics and get overview over time."
             }
         },
 
@@ -143,6 +148,19 @@
 
             "title": "Resumed playing."
         },
+
+        "statistics": {
+            "description": "Opens statistics menu.",
+            "detailedDescription": {
+                "title": "/stats",
+                "description": "Shows overview of all the statistics you have access to.",
+                "syntax": "`/stats`",
+                "returns": "> Statistics menu."
+            }
+        },
+
+
+
 
         "remind": {
             "description": "Starts the reminders editing mode.",

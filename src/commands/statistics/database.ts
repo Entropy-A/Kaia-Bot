@@ -1,15 +1,10 @@
-import {LoggerType, StaticLogger} from "./log/logger.js";
+import {LoggerType, StaticLogger} from "../../utils/log/logger.js";
+import mongoose, {Types, Schema} from "mongoose";
+import {Keys} from "../../keys/keys.js";
 
-console.log("testfile")
+const mongoUrl = Keys.mongoUrl;
 
-import mongoose, {Types} from "mongoose";
-import {Schema} from "mongoose";
-import {Guild} from "discord.js";
-//import {Keys} from "../keys/keys.js";
-
-//const mongoUrl = Keys.mongoUrl;
-
-const mongoUrl = "mongodb+srv://joel:qya1CaKfC9Mg9DIW@database.e6faq.mongodb.net/?retryWrites=true&w=majority&appName=Database"
+//TODO: register database
 
 interface IStatGuild extends mongoose.Document {
     guildId: string;
@@ -179,6 +174,13 @@ class StatEntry {
         await this.data.save()
     }
 
+    async editValue(timestamp: Date, newValue: number) {
+        let value = this.data.values.find((value) => value.timestamp.toISOString() === timestamp.toISOString());
+        if (!value?.value) return;
+        value.value = newValue;
+        await this.data.save()
+    }
+
     async setName(name: string) {
         this.data.name = name;
         await this.data.save()
@@ -224,17 +226,3 @@ class Stats {
         return new StatGuild(guild);
     }
 }
-
-const stats = await Stats.connect()
-//const guild = await stats.addGuild("guild123")
-//const stat = await guild.addStat("Poker", ["user1"])
-//const entry = await stat.addEntry("Joel", 100, ["user1"])
-
-const guild = await stats.getGuild("guild123")
-
-const stat = await guild?.getStat("Poker", {requestUserId: "user1"})
-const entry = await stat?.getEntry("Joel", {requestUserId: "user1"})
-
-const entry1 = await stat?.getEntry("Joel", {requestUserId: "user1"})
-
-console.log(entry1)
