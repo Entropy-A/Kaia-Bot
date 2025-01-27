@@ -21,6 +21,7 @@ interface IStat extends mongoose.Document {
 interface IStatEntry extends mongoose.Document {
     guildId: string,
     name: string,
+    ownerId: string,
     permittedUserIds: string[],
     values: [{
         value: number,
@@ -29,12 +30,13 @@ interface IStatEntry extends mongoose.Document {
 }
 
 const statEntrySchema = new Schema<IStatEntry>({
-    guildId: { type: String, required: true },
-    name: { type: String, required: true },
+    guildId: {type: String, required: true},
+    name: {type: String, required: true},
+    ownerId: {type: String, required: true},
     permittedUserIds: [String],
     values: [{
-        value: { type: Number, required: true },
-        timestamp: { type: Date, default: Date.now },
+        value: {type: Number, required: true},
+        timestamp: {type: Date, default: Date.now},
     }],
 });
 const MEntry = mongoose.model<IStatEntry>("Entry", statEntrySchema);
@@ -104,6 +106,9 @@ class Stat {
         this.logger = new StaticLogger(LoggerType.MONGODB, `Stat: [${data.name}]`)
     }
 
+    /**
+     * Get all entry userId has access on.
+     */
     async getEntry(name: string, validation: {requestUserId: string}) {
         const guildId = this.data.guildId
         const entry = await MEntry.findOne({ guildId, name, permittedUserIds: {$in: [validation.requestUserId] }});
@@ -111,18 +116,41 @@ class Stat {
         return new StatEntry(entry);
     }
 
-    async getEntries(name: string, validation: {requestUserId: string}) {
+    /**
+     * Get all entries userId has access on.
+     */
+    async getEntries(validation: {requestUserId: string}) {
         const guildId = this.data.guildId
-        const entries_ = await MEntry.find({name, guildId, permittedUserIds: {$in: [validation.requestUserId] } });
+        const entries_ = await MEntry.find({ guildId, permittedUserIds: {$in: [validation.requestUserId] } });
         const entries = entries_.map(entry => new StatEntry(entry));
         return entries.length ? entries : null;
     }
 
-    async addEntry(name: string, value: number, permittedUserIds: string[]) {
+    /**
+     * Get all entry userId is owner on.
+     */
+    async getMyEntry(name: string, validation: {requestUserId: string}) {
+        const guildId = this.data.guildId
+        const entry = await MEntry.findOne({ guildId, name, ownerId: {$in: [validation.requestUserId] }});
+        if (!entry) return null
+        return new StatEntry(entry);
+    }
+
+    /**
+     * Get all entries userId is owner on.
+     */
+    async getMyEntries(validation: {requestUserId: string}) {
+        const guildId = this.data.guildId
+        const entries_ = await MEntry.find({guildId, ownerId: {$in: [validation.requestUserId] } });
+        const entries = entries_.map(entry => new StatEntry(entry));
+        return entries.length ? entries : null;
+    }
+
+    async addEntry(name: string, value: number, ownerId: string, permittedUserIds: string[]) {
         const guildId = this.data.guildId
         let entry = await MEntry.findOne({guildId, name, permittedUserIds: {$in: permittedUserIds}});
         if (!entry) {
-            entry = new MEntry({ guildId, permittedUserIds, name, value });
+            entry = new MEntry({ guildId, ownerId, permittedUserIds, name, value });
             await entry.save();
             this.data.entries.push(entry)
             await this.data.save();
