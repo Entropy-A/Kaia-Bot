@@ -1,11 +1,10 @@
 import {Colors, Emojis, Images} from "../../config/index.js";
 import {text} from "../../text/loadText.js";
 import {
-    ButtonStyle,
     ChatInputApplicationCommandData,
     ChatInputCommandInteraction,
-    LocaleString,
-    SelectMenuComponentOptionData
+    SelectMenuComponentOptionData,
+    Locale,
 } from "discord.js";
 import _ from "underscore";
 import {Command, CommandCallback, commands} from "../index.js";
@@ -111,7 +110,7 @@ const callback: CommandCallback<ChatInputCommandInteraction> = async ({interacti
 // ! Command export.
 export default new Command({data, icon, color, detailedDescription, callback})
 
-function selectMenuGenerator(locale: LocaleString) {
+function selectMenuGenerator(locale: Locale) {
     // TODO Add list for other kinds of commands like userCommand. / Add type of command to help
     const options: SelectMenuComponentOptionData[] = []
 
@@ -136,7 +135,7 @@ function selectMenuGenerator(locale: LocaleString) {
     })
 }
 
-function dynamicEmbedUpdate(locale: LocaleString): DynamicEmbedUpdate {
+function dynamicEmbedUpdate(locale: Locale): DynamicEmbedUpdate {
     return (page, menu) => {
         const pageInfo = menu.getPage(page)
         const categoryInfo = menu.getCategoryByPage(page)
@@ -169,7 +168,7 @@ function dynamicEmbedUpdate(locale: LocaleString): DynamicEmbedUpdate {
     }
 }
 
-function mainPage(locale: LocaleString): PageMenuCategory {
+function mainPage(locale: Locale): PageMenuCategory {
     // Menu page with bottom to fix Size.
     const menuEmbed = EmbedGenerator.Command(color, icon, text.commands.help.menu.title.get(locale), {
             description: text.commands.help.menu.description.get(locale),
@@ -204,7 +203,7 @@ function mainPage(locale: LocaleString): PageMenuCategory {
     return { id: "mainPage", pages: { "mainPage": new Page({id: "mainPage", embeds: [menuEmbed]})}}
 }
 
-function detailedHelpPages(locale: LocaleString): PageMenuCategory[] {
+function detailedHelpPages(locale: Locale): PageMenuCategory[] {
     // Creates autoPages for every command.
     const commandPages: PageMenuCategory[] = []
     for (const category of commands.categories.values()) {

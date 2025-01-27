@@ -27,7 +27,7 @@ type CommandInteractionMap<D extends ApplicationCommandData> =
     D extends UserApplicationCommandData ? UserContextMenuCommandInteraction :
     never
 
-// TODO: maybe explain other types of command like messageContextCommand
+// TODO: maybe explain other statTypes of command like messageContextCommand
 interface CommandDetailedDescription {
     title: LocaleText,
     description: LocaleText,

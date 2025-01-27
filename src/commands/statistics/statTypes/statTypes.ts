@@ -1,8 +1,5 @@
-import {LoggerType, StaticLogger} from "../../utils/log/logger.js";
+import {LoggerType, StaticLogger} from "../../../utils/log/logger.js";
 import mongoose, {Types, Schema} from "mongoose";
-import {Keys} from "../../keys/keys.js";
-
-const mongoUrl = Keys.mongoUrl;
 
 //TODO: register database
 
@@ -31,7 +28,7 @@ interface IStatEntry extends mongoose.Document {
 
 const statEntrySchema = new Schema<IStatEntry>({
     guildId: {type: String, required: true},
-    name: {type: String, required: true},
+    name: {type: String, required: true, unique: true,},
     ownerId: {type: String, required: true},
     permittedUserIds: [String],
     values: [{
@@ -44,7 +41,7 @@ const MEntry = mongoose.model<IStatEntry>("Entry", statEntrySchema);
 const statSchema = new Schema<IStat>({
     guildId: { type: String, required: true },
     permittedUserIds: [String],
-    name: { type: String, required: true },
+    name: { type: String, required: true, unique: true, },
     entries: [statEntrySchema],
 });
 const MStat = mongoose.model<IStat>("Stat", statSchema);
@@ -228,16 +225,10 @@ class StatEntry {
     }
 }
 
-class Stats {
+export class Stats {
     private readonly logger = new StaticLogger(LoggerType.MONGODB, "Stats")
 
-    private constructor() {
-    }
-
-    static async connect () {
-        await mongoose.connect(mongoUrl);
-        return new Stats();
-    }
+    constructor() {}
 
     async getGuild(guildId: string) {
         const guild = await MGuild.findOne({guildId})

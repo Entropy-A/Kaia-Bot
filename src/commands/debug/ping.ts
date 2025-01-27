@@ -1,11 +1,14 @@
 import {Colors, Images} from "../../config/index.js";
 import {text} from "../../text/loadText.js";
-import {ButtonStyle, ChatInputApplicationCommandData, ChatInputCommandInteraction, LocaleString} from "discord.js";
+import {
+    ChatInputApplicationCommandData,
+    ChatInputCommandInteraction,
+    Locale,
+} from "discord.js";
 import _ from "underscore";
 import {Command, CommandCallback} from "../index.js";
 import {Page} from "../../types/pages.js";
-import {ButtonGenerator, EmbedGenerator, handleError} from "../../utils/index.js";
-import {Button} from "../../types/index.js";
+import {EmbedGenerator, handleError} from "../../utils/index.js";
 
 const color = Colors.gray
 const icon = Images.pingIcon
@@ -33,13 +36,13 @@ const callback: CommandCallback<ChatInputCommandInteraction> = async ({interacti
 // ! Command export.
 export default new Command({data, icon, color, detailedDescription, callback})
 
-function checkPing(locale: LocaleString) {
+function checkPing(locale: Locale) {
     return new Page({
         id: "pinging...",
         embeds: [EmbedGenerator.Command(color, Images.loadingIcon, "Waiting for response...")]
     })
 }
-function pingPage(locale: LocaleString, pingValue: number): Page {
+function pingPage(locale: Locale, pingValue: number): Page {
     const ping = ` \`${pingValue}ms\` `;
     const title = text.commands.ping.title.get(locale);
     let message: string
