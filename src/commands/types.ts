@@ -11,7 +11,7 @@ import {
     UserApplicationCommandData,
     UserContextMenuCommandInteraction
 } from "discord.js";
-import {Callback} from "../types/index.js";
+import {BaseCallback} from "../types/index.js";
 import {Colors, Images} from "../config/index.js";
 
 export enum CommandCategoryIds {
@@ -35,7 +35,7 @@ interface CommandDetailedDescription {
     returns: LocaleText
 }
 
-export type CommandCallback<I extends CommandInteraction> = Callback<Awaitable<unknown>, I>;
+export type CommandCallback<I extends CommandInteraction> = BaseCallback<Awaitable<unknown>, I>;
 
 interface CommandData<D extends ApplicationCommandData> {
     data: D,

@@ -4,13 +4,13 @@ import {Collection} from "discord.js";
 import {Emojis} from "../../config/index.js";
 import {CommandCategoryIds} from "../index.js";
 
-//import ping from "./ping.js";
+import stats from "./stats.js"
 
 export default new CommandCategory ({
     id: CommandCategoryIds.statistics,
     name: text.commands.categories.statistics.name,
-    commands: new Collection<string, CommandTypes>(),
-        //.set(ping.data.name, ping),
+    commands: new Collection<string, CommandTypes>()
+        .set(stats.data.name, stats),
     emoji: Emojis.statisticsIcon,
     description: text.commands.categories.statistics.description,
 })

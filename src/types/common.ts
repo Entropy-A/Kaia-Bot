@@ -14,18 +14,18 @@ export interface CallbackProps<Interaction extends BaseInteraction | null> {
     logger: StaticLogger,
 }
 
-export type Callback<ReturnType, Interaction extends BaseInteraction | null, Args extends unknown[] = unknown[]> = (
+export type BaseCallback<ReturnType, Interaction extends BaseInteraction | null, Args extends unknown[] = unknown[]> = (
     props: CallbackProps<Interaction>,
     ...args: Args
 ) => ReturnType;
 
-export type VisibilityCallback = Callback<boolean, BaseInteraction | null>
+export type VisibilityCallback = BaseCallback<boolean, BaseInteraction | null>
 
 export interface ComponentProtoData<Generator extends ComponentGenerators> {
     id: string,
     generator: Generator,
     visibilityCallback?: VisibilityCallback,
-    callback?: Callback<Awaitable<unknown>, InteractionGeneratorMap<Generator>>
+    callback?: BaseCallback<Awaitable<unknown>, InteractionGeneratorMap<Generator>>
 }
 
 /**
@@ -44,10 +44,10 @@ export abstract class ComponentPrototype<Generator extends ComponentGenerators> 
     public readonly generator: Generator;
 
     /**
-     * Callback to check if component shall be displayed.
+     * BaseCallback to check if component shall be displayed.
      */
     public readonly visibilityCallback: VisibilityCallback
-    public readonly callback?: Callback<Awaitable<unknown>, InteractionGeneratorMap<Generator>>
+    public readonly callback?: BaseCallback<Awaitable<unknown>, InteractionGeneratorMap<Generator>>
 
     constructor(data: ComponentProtoData<Generator>) {
         this.id = data.id

@@ -36,7 +36,7 @@ export interface PageData{
         [ ComponentPrototypes?, ComponentPrototypes?, ComponentPrototypes?, ComponentPrototypes?, ComponentPrototypes? ]?,
         [ ComponentPrototypes?, ComponentPrototypes?, ComponentPrototypes?, ComponentPrototypes?, ComponentPrototypes? ]?,
         [ ComponentPrototypes?, ComponentPrototypes?, ComponentPrototypes?, ComponentPrototypes?, ComponentPrototypes? ]?
-    ] // TODO: Find better way --> components.ts
+    ] // TODO: Find better way --> buttons.ts
 }
 
 export class Page {

@@ -1,10 +1,10 @@
 import {ClientEvents, Awaitable} from "discord.js";
-import {Callback} from "../types/common.js";
+import {BaseCallback} from "../types/common.js";
 
 export {Events} from "discord.js"
 export type EventKeys = keyof ClientEvents;
 
-export type EventCallback<K extends EventKeys> = Callback<Awaitable<unknown>, null, ClientEvents[K]>
+export type EventCallback<K extends EventKeys> = BaseCallback<Awaitable<unknown>, null, ClientEvents[K]>
 export interface EventData<K extends EventKeys> {
     key: K,
     callback: EventCallback<K>,

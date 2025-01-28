@@ -1,14 +1,5 @@
 import { ComponentProtoData, ComponentPrototype} from "./index.js"
 import { ButtonGenerator, StringSelectGenerator, ModalGenerator} from "../utils/generators/index.js"
-import {
-    ButtonInteraction, CacheType,
-    ChannelSelectMenuInteraction,
-    MentionableSelectMenuInteraction,
-    RoleSelectMenuInteraction,
-    StringSelectMenuInteraction,
-    UserSelectMenuInteraction
-} from "discord.js";
-
 /**
  * Class for component handling.
  */

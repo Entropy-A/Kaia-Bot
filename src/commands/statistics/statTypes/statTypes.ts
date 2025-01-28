@@ -12,6 +12,7 @@ interface IStat extends mongoose.Document {
     guildId: string,
     permittedUserIds: string[],
     name: string,
+    description: string,
     entries: IStatEntry[]
 }
 
@@ -39,22 +40,23 @@ const statEntrySchema = new Schema<IStatEntry>({
 const MEntry = mongoose.model<IStatEntry>("Entry", statEntrySchema);
 
 const statSchema = new Schema<IStat>({
-    guildId: { type: String, required: true },
+    guildId: {type: String, required: true},
     permittedUserIds: [String],
-    name: { type: String, required: true, unique: true, },
+    name: {type: String, required: true, unique: true},
+    description: {type: String, required: true},
     entries: [statEntrySchema],
 });
 const MStat = mongoose.model<IStat>("Stat", statSchema);
 
 const guildSchema = new Schema<IStatGuild>({
-    guildId: { type: String, required: true, unique: true },
-    stats: [{ type: Schema.Types.ObjectId, ref: "Stat" }],
+    guildId: {type: String, required: true},
+    stats: [{type: Schema.Types.ObjectId, ref: "Stat"}],
 });
 const MGuild = mongoose.model<IStatGuild>('Guild', guildSchema)
 
 // TODO: stuff when add already exists
 
-class StatGuild {
+export class StatGuild {
     private readonly logger:StaticLogger
 
     constructor(private data: IStatGuild) {
@@ -96,11 +98,19 @@ class StatGuild {
     }
 }
 
-class Stat {
+export class Stat {
     private readonly logger: StaticLogger
 
     constructor(private data: IStat) {
         this.logger = new StaticLogger(LoggerType.MONGODB, `Stat: [${data.name}]`)
+    }
+
+    get name() {
+        return this.data.name
+    }
+
+    get description() {
+        return this.data.description
     }
 
     /**
@@ -181,7 +191,7 @@ class Stat {
     }
 }
 
-class StatEntry {
+export class StatEntry {
     constructor(private data: IStatEntry) {}
 
     get name(): string {

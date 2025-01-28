@@ -24,7 +24,7 @@ export default new Event({
                 }
             }
         } catch (e) {
-            handleError(interaction, e, logger);
+            await handleError(interaction, logger, e);
         }
     }
 })

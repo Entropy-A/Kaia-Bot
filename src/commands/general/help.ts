@@ -21,96 +21,104 @@ const data: ChatInputApplicationCommandData = {
     type: 1
 }
 
+enum ComponentIds {
+    nextButton = "nextButton",
+    backButton = "backButton",
+    menu = "menu",
+    website = "website",
+    invite = "invite",
+    dcServer = "dcServer",
+}
+
 const callback: CommandCallback<ChatInputCommandInteraction> = async ({interaction, logger}) => {
     try {
-        const mainPage_ = mainPage(interaction.locale);
-        const detailedHelpPages_ = detailedHelpPages(interaction.locale);
+        const selectMenu: [StringSelect] = [
+            new StringSelect({
+                id: "selectCommand",
+                generator: buildSelectMenu(interaction.locale),
+                callback: async ({interaction}) => {
+                    const newPage = menu.getPage(interaction.values[0])?.page
+                    if (!newPage) return handleError(interaction, logger, new Error(`Did not find command with name: [${interaction.values[0]}] from stringSelect.`))
 
-        const selectMenu = new StringSelect({
-            id: "selectCommand",
-            generator: selectMenuGenerator(interaction.locale),
-            callback: async ({interaction}) => {
-                const newPage = menu.getPage(interaction.values[0])?.page
-                if (!newPage) return handleError(interaction, new Error(`Did not find command with name: [${interaction.values[0]}] from stringSelect.`), logger)
+                    await menu.update(interaction, newPage)
+                }
+            })
+        ]
 
-                await menu.update(interaction, newPage)
-            }
-        })
-
-        const visibilityCallback = () => {
+        const navigationVisCallback = () => {
             return !(!menu.currentPage || menu.currentPage.page.data.id === "mainPage");
         }
 
-        const linkVisibilityCallback = () => {
+        const linkVisCallback = () => {
             return !(!menu.currentPage || !(menu.currentPage.page.data.id === "mainPage"));
         }
 
-        const nextButton = new Button({
-            id: "nextButton",
-            generator: ButtonGenerator.Next(),
-            visibilityCallback,
-            callback: ({interaction}) => {
-                menu.defaultButtonCallbacks.absoluteNext(interaction, [0])
-            }
-        })
+        const navigationButtons: [Button, Button, Button] = [
+            new Button({
+                id: ComponentIds.backButton,
+                generator: ButtonGenerator.Back(),
+                visibilityCallback: navigationVisCallback,
+                callback: async ({interaction}) => {
+                    await menu.defaultButtonCallbacks.absoluteBack(interaction, [0])
+                }
+            }),
+            new Button({
+                id: ComponentIds.menu,
+                generator: ButtonGenerator.Menu(),
+                visibilityCallback: navigationVisCallback,
+                callback: async ({interaction}) => {
+                    await menu.update(interaction, "mainPage")
+                }
+            }),
+            new Button({
+                id: ComponentIds.nextButton,
+                generator: ButtonGenerator.Next(),
+                visibilityCallback: navigationVisCallback,
+                callback: async ({interaction}) => {
+                    await menu.defaultButtonCallbacks.absoluteNext(interaction, [0])
+                }
+            })
+        ]
 
-        const backButton = new Button({
-            id: "backButton",
-            generator: ButtonGenerator.Back(),
-            visibilityCallback,
-            callback: ({interaction}) => {
-                menu.defaultButtonCallbacks.absoluteBack(interaction, [0])
-            }
-        })
-
-        const menuButton = new Button({
-            id: "menu",
-            generator: ButtonGenerator.Menu(),
-            visibilityCallback,
-            callback: ({interaction}) => {
-                menu.update(interaction, "mainPage")
-            }
-        })
-
-        const website = new Button({
-            id: "website",
-            generator: ButtonGenerator.Link("Website", "https://www.youtube.com/watch?v=d43lJsK7Kvo", Emojis.botWebsite),
-            visibilityCallback: linkVisibilityCallback,
-        })
-
-        const invite = new Button({
-            id: "invite",
-            generator: ButtonGenerator.Link("Invite me!", "https://www.youtube.com/watch?v=d43lJsK7Kvo", Emojis.invite),
-            visibilityCallback: linkVisibilityCallback,
-        })
-
-        const dcServer = new Button({
-            id: "dcServer",
-            generator: ButtonGenerator.Link("My guild!", "https://www.youtube.com/watch?v=d43lJsK7Kvo", Emojis.dcServer),
-            visibilityCallback: linkVisibilityCallback,
-        })
+        const linkButtons: [Button, Button, Button] = [
+            new Button({
+                id: ComponentIds.website,
+                generator: ButtonGenerator.Link("Website", "https://www.youtube.com/watch?v=d43lJsK7Kvo", Emojis.botWebsite),
+                visibilityCallback: linkVisCallback,
+            }),
+            new Button({
+                id: ComponentIds.invite,
+                generator: ButtonGenerator.Link("Invite me!", "https://www.youtube.com/watch?v=d43lJsK7Kvo", Emojis.add),
+                visibilityCallback: linkVisCallback,
+            }),
+            new Button({
+                id: ComponentIds.dcServer,
+                generator: ButtonGenerator.Link("My guild!", "https://www.youtube.com/watch?v=d43lJsK7Kvo", Emojis.dcServer),
+                visibilityCallback: linkVisCallback,
+            })
+        ]
 
         const menu = new PageMenu({id: "helpMenu"})
-            .addCategories([mainPage_])
-            .addCategories(detailedHelpPages_)
+            .addCategories(mainPage(interaction.locale))
+            .addCategories(detailedHelpPages(interaction.locale))
             .addGlobalComponentRows([
-                [website, invite, dcServer],
-                [selectMenu],
-                [backButton, menuButton, nextButton],
+                selectMenu,
+                navigationButtons,
+                linkButtons,
             ])
             .addDynamicEmbedUpdates([dynamicEmbedUpdate(interaction.locale)])
 
         await menu.send("mainPage", interaction, undefined, true)
 
     } catch (e) {
-        await handleError(interaction, e, logger)
+        await handleError(interaction, logger, e)
     }
 }
 
 // ! Command export.
 export default new Command({data, icon, color, detailedDescription, callback})
 
-function selectMenuGenerator(locale: Locale) {
+function buildSelectMenu(locale: Locale) {
     // TODO Add list for other kinds of commands like userCommand. / Add type of command to help
     const options: SelectMenuComponentOptionData[] = []
 
@@ -168,7 +176,7 @@ function dynamicEmbedUpdate(locale: Locale): DynamicEmbedUpdate {
     }
 }
 
-function mainPage(locale: Locale): PageMenuCategory {
+function mainPage(locale: Locale): PageMenuCategory[] {
     // Menu page with bottom to fix Size.
     const menuEmbed = EmbedGenerator.Command(color, icon, text.commands.help.menu.title.get(locale), {
             description: text.commands.help.menu.description.get(locale),
@@ -200,7 +208,7 @@ function mainPage(locale: Locale): PageMenuCategory {
         {name: "\u200B", value: text.commands.help.menu.credits.get("en-US"), inline: false}
     )
 
-    return { id: "mainPage", pages: { "mainPage": new Page({id: "mainPage", embeds: [menuEmbed]})}}
+    return [{ id: "mainPage", pages: { "mainPage": new Page({id: "mainPage", embeds: [menuEmbed]})}}]
 }
 
 function detailedHelpPages(locale: Locale): PageMenuCategory[] {

@@ -5,6 +5,7 @@ import _ from "underscore";
 import {Command, CommandCallback} from "../index.js";
 import {Page} from "../../types/pages.js";
 import {EmbedGenerator, handleError} from "../../utils/index.js";
+import {CURRENTLYNOTAVAILABLE} from "./play.js";
 
 const color = Colors.gray
 const icon = Images.pauseIcon
@@ -20,20 +21,9 @@ const callback: CommandCallback<ChatInputCommandInteraction> = async ({interacti
         await CURRENTLYNOTAVAILABLE().send(interaction, undefined, true);
 
     } catch (error) {
-        await handleError(interaction, error, logger)
+        await handleError(interaction, logger, error)
     }
 }
 
 // ! Command export.
 export default new Command({data, icon, color, detailedDescription, callback})
-
-function CURRENTLYNOTAVAILABLE() {
-    return new Page({
-        id: "musicNotAvailable",
-        embeds: [EmbedGenerator.create({
-            color: Colors.error,
-            author: {iconURL: Images.errorIcon, name: "Music commands currently unavailable."},
-            description: "Thanks to the bitches at **YT HQ** are music commands ``currently unavailable`` since YT prohibits access to video streams via bots."
-        })]
-    })
-}

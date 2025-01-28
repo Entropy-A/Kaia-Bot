@@ -8,6 +8,8 @@ export enum Images {
     pingIcon = "https://i.ibb.co/Vq8cryg/network-check-24dp-878181-FILL0-wght400-GRAD0-opsz24.png",
     helpIcon  = "https://i.ibb.co/gjkY7Wv/waving-hand-24dp-878181-FILL0-wght400-GRAD0-opsz24.png",
 
+    statsIcon = "https://i.ibb.co/VM1k9Sy/monitoring-24dp-878181-FILL0-wght400-GRAD0-opsz24.png",
+
     playIcon = "https://i.ibb.co/YWRpD94/play-arrow-24dp-878181-FILL0-wght400-GRAD0-opsz24.png",
     addQueueIcon = "",
     pauseIcon = "",

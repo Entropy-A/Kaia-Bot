@@ -12,6 +12,6 @@ export enum Emojis {
     home = "<:home:1331546601080229909>",
 
     botWebsite = "<:website:1331404313418797056>",
-    invite = "<:add:1331404747764138083>",
+    add = "<:add:1331404747764138083>",
     dcServer = "👾",
 }

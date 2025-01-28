@@ -30,7 +30,14 @@ export class ButtonGenerator extends ButtonBuilder {
             .setEmoji(Emojis.arrowRight)
     }
 
-    public static newReminder(data?: Data) {
+    public static NewStats(data?: Data) {
+        return this.create(data)
+            .setStyle(ButtonStyle.Success)
+            //.setEmoji(Emojis.add)
+            .setLabel("add")
+    }
+
+    public static NewReminder(data?: Data) {
         return this.create(data)
             .setStyle(ButtonStyle.Success)
             .setEmoji("➕")
