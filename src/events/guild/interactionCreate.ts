@@ -10,16 +10,16 @@ export default new Event({
             if (interaction.isCommand()) {
                 const name = interaction.commandName
                 const command = commands.getCommand(name);
-                if (!command) throw new Error(`Could not resolve command with name: "${name}"`);
+                if (!command.success) return await handleError(interaction, logger, command.error)
 
                 switch (true) {
-                    case command.type === 1 && interaction.isChatInputCommand():
-                        return executeChatInputCommand(interaction, command as Command<ChatInputApplicationCommandData>, client);
+                    case command.data.type === 1 && interaction.isChatInputCommand():
+                        return executeChatInputCommand(interaction, command.data as Command<ChatInputApplicationCommandData>, client);
 
-                    case command.type === 2 && interaction.isUserContextMenuCommand():
+                    case command.data.type === 2 && interaction.isUserContextMenuCommand():
                         return
 
-                    case command.type === 3 && interaction.isMessageContextMenuCommand():
+                    case command.data.type === 3 && interaction.isMessageContextMenuCommand():
                         return
                 }
             }

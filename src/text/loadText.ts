@@ -21,19 +21,19 @@ const Locals = Object.values(Locale)
  */
 // TODO: Remove [...] in Errors when handling the text stuff
 export class LocaleText  {
-    constructor(private data: Record<LocaleString, string>) {}
+    constructor(private data: Record<Locale, string>) {}
 
     public get locals() {
         return this.data
     }
 
-    public get(locale: LocaleString = "en-US"): string {
+    public get(locale: Locale = Locale.EnglishUS): string {
         if (this.data[locale]) return this.data[locale]
-        else if (this.data["en-US"]) return this.data["en-US"]
-        else throw new Error(`[Text] Accessed property was not defined in the ["en-us" and "${locale}"] language file(s).`)
+        else if (this.data[Locale.EnglishUS]) return this.data[Locale.EnglishUS]
+        else throw new Error(`[Text] Accessed property was not defined in the ["en-us" or "${locale}"] language file(s).`)
     }
 
-    public insertInMessage(strings: string[], locale: LocaleString): string {
+    public insertInMessage(strings: string[], locale: Locale): string {
         let pendingMessage = this.get(locale)
 
         for (const string of strings) {
@@ -60,7 +60,7 @@ for (const file of files) {
 
     // ! Check if file matches the schema
     try {
-        const id: LocaleString = fileId
+        const id: Locale = fileId
         languages[id] = textDataSchema.parse(data);
         syslog.log(`Text validation [${id}]`, "Successful: JSON matches the schema.")
 
@@ -93,7 +93,7 @@ for (const [id, language] of Object.entries(languages)) {
             // Initializes class if in last branch.
             if (i === result.path.length - 1) {
 
-                if (!currentTree[path]) currentTree[path] = new LocaleText({} as Record<LocaleString, string>)
+                if (!currentTree[path]) currentTree[path] = new LocaleText({} as Record<Locale, string>)
             }
 
             // * Develops tree if not in last branch.

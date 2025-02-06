@@ -1,6 +1,12 @@
 import {Colors, Images} from "../../config/index.js";
 import {text} from "../../text/loadText.js";
-import {ChatInputApplicationCommandData, ChatInputCommandInteraction, GuildMember, LocaleString} from "discord.js";
+import {
+    ChatInputApplicationCommandData,
+    ChatInputCommandInteraction,
+    GuildMember,
+    Locale,
+    LocaleString
+} from "discord.js";
 import _ from "underscore";
 import {Command, CommandCallback} from "../index.js";
 import {Page} from "../../types/pages.js";
@@ -20,11 +26,11 @@ const icon = Images.playIcon
 const detailedDescription = text.commands.play.detailedDescription
 const data: ChatInputApplicationCommandData = {
     name: "play",
-    description: text.commands.play.description.get("en-US"),
+    description: text.commands.play.description.get(Locale.EnglishUS),
     descriptionLocalizations: _.omit(text.commands.play.description.locals, "en-US"),
     options : [{
         name: "title",
-        description: text.commands.play.optionDescription.get("en-US"),
+        description: text.commands.play.optionDescription.get(Locale.EnglishUS),
         descriptionLocalizations: _.omit(text.commands.play.optionDescription.locals, "en-US"),
         type: 3,
         required: true,

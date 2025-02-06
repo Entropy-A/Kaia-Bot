@@ -1,6 +1,4 @@
-import {LocaleString} from "discord.js";
 import {LocaleText, text} from "../../text/loadText.js";
-
 
 export enum ExpectedErrorID {
     userNotConnectedToVoice = "userNotConnectedToVoice",

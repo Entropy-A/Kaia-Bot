@@ -15,9 +15,9 @@ export async function registerCommands(client: Client, commands: Commands) {
         registeredCommands.forEach( command => {
             const rawCommand = commands.getCommand(command.name)
             const category = commands.getCategory(command.name);
-            if (rawCommand && category) {
-                rawCommand.id = command.id
-                category.commands.set(command.name, rawCommand);
+            if (rawCommand.success && category.success) {
+                rawCommand.data.id = command.id
+                category.data.commands.set(command.name, rawCommand.data);
             } else throw new Error(`Command: [${command.name}] Could not set command id.`)
         })
     }).then(() => {

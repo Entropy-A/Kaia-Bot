@@ -1,6 +1,12 @@
 import {Colors, Images} from "../../config/index.js";
 import {text} from "../../text/loadText.js";
-import {ChatInputApplicationCommandData, ChatInputCommandInteraction, GuildMember, LocaleString} from "discord.js";
+import {
+    ChatInputApplicationCommandData,
+    ChatInputCommandInteraction,
+    GuildMember,
+    Locale,
+    LocaleString
+} from "discord.js";
 import _ from "underscore";
 import {Command, CommandCallback} from "../index.js";
 import {Page} from "../../types/pages.js";
@@ -12,7 +18,7 @@ const icon = Images.resumeIcon
 const detailedDescription = text.commands.resume.detailedDescription
 const data: ChatInputApplicationCommandData = {
     name: "resume",
-    description: text.commands.resume.description.get("en-US"),
+    description: text.commands.resume.description.get(Locale.EnglishUS),
     descriptionLocalizations: _.omit(text.commands.resume.description.locals, "en-US"),
     type: 1
 }

@@ -15,7 +15,7 @@ const icon = Images.pingIcon
 const detailedDescription = text.commands.ping.detailedDescription
 const data: ChatInputApplicationCommandData = {
     name: "ping",
-    description: text.commands.ping.description.get("en-US"),
+    description: text.commands.ping.description.get(Locale.EnglishUS),
     descriptionLocalizations: _.omit(text.commands.ping.description.locals, "en-US"),
     type: 1
 }

@@ -1,5 +1,5 @@
 import {GeneratorDataMap} from "./index.js";
-import {Embed, EmbedBuilder, LocaleString} from "discord.js";
+import {EmbedBuilder, Locale} from "discord.js";
 import {Colors, Images} from "../../config/index.js";
 import {ExpectedError} from "../errors/index.js";
 import {text} from "../../text/loadText.js";
@@ -11,7 +11,7 @@ export class EmbedGenerator extends EmbedBuilder {
         return new EmbedGenerator(data);
     }
 
-    public static error(error: Error | ExpectedError, locale: LocaleString, data?: Data) {
+    public static error(error: Error | ExpectedError, locale: Locale, data?: Data) {
         const embed = new EmbedBuilder(data).setColor(Colors.error)//.setThumbnail();;
 
         if (error instanceof ExpectedError) {

@@ -1,5 +1,6 @@
 import { ComponentProtoData, ComponentPrototype} from "./index.js"
 import { ButtonGenerator, StringSelectGenerator, ModalGenerator} from "../utils/generators/index.js"
+import {UserSelectGenerator} from "../utils/generators/userSelect.js";
 /**
  * Class for component handling.
  */
@@ -28,4 +29,13 @@ export class StringSelect extends ComponentPrototype<StringSelectGenerator> {
     }
 }
 
-export type ComponentPrototypes = Button | StringSelect // TODO: Find better way and add more
+/**
+ * Class for component handling.
+ */
+export class UserSelect extends ComponentPrototype<UserSelectGenerator> {
+    constructor(data: ComponentProtoData<UserSelectGenerator>) {
+        super(data)
+    }
+}
+
+export type ComponentPrototypes = Button | StringSelect | UserSelect // TODO: Find better way and add more

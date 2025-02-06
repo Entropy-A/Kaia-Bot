@@ -16,7 +16,7 @@ const icon = Images.helpIcon
 const detailedDescription = text.commands.help.detailedDescription
 const data: ChatInputApplicationCommandData = {
     name: "help",
-    description: text.commands.help.description.get("en-US"),
+    description: text.commands.help.description.get(Locale.EnglishUS),
     descriptionLocalizations: _.omit(text.commands.help.description.locals, "en-US"),
     type: 1
 }
@@ -35,7 +35,7 @@ const callback: CommandCallback<ChatInputCommandInteraction> = async ({interacti
         const selectMenu: [StringSelect] = [
             new StringSelect({
                 id: "selectCommand",
-                generator: buildSelectMenu(interaction.locale),
+                generator: StringSelectGenerator.helpSelectMenu(interaction.locale),
                 callback: async ({interaction}) => {
                     const newPage = menu.getPage(interaction.values[0])?.page
                     if (!newPage) return handleError(interaction, logger, new Error(`Did not find command with name: [${interaction.values[0]}] from stringSelect.`))
@@ -118,31 +118,6 @@ const callback: CommandCallback<ChatInputCommandInteraction> = async ({interacti
 // ! Command export.
 export default new Command({data, icon, color, detailedDescription, callback})
 
-function buildSelectMenu(locale: Locale) {
-    // TODO Add list for other kinds of commands like userCommand. / Add type of command to help
-    const options: SelectMenuComponentOptionData[] = []
-
-    commands.categories.map((category) => {
-        const emoji = category.emoji
-        for (const command of category.commands.values()) {
-            const option: SelectMenuComponentOptionData = {
-                label: `/${command.data.name}`,
-                // Description only awailable on ChatInput.
-                description: (command.data.type === 1 ) ? command.data.description : undefined,
-                value: command.data.name,
-                emoji
-            }
-            options.push(option)
-        }
-    })
-
-    return StringSelectGenerator.create({
-        placeholder: text.commands.help.selectMenuPlaceholder.get(locale),
-        maxValues: 1,
-        options
-    })
-}
-
 function dynamicEmbedUpdate(locale: Locale): DynamicEmbedUpdate {
     return (page, menu) => {
         const pageInfo = menu.getPage(page)
@@ -150,11 +125,12 @@ function dynamicEmbedUpdate(locale: Locale): DynamicEmbedUpdate {
         if (!pageInfo || !categoryInfo || page.data.id === "mainPage") return page.data.embeds
 
         const category_ = commands.getCategory(categoryInfo.category.id)
+        if (!category_.success) throw category_.error
 
-        const emoji = category_?.emoji ?? ""
+        const emoji = category_.data.emoji ?? ""
         const index = pageInfo.index + 1
         const category = categoryInfo.category
-        const categoryLink = category_?.documentationLink ?? "https://www.youtube.com/watch?v=d43lJsK7Kvo"
+        const categoryLink = category_.data.documentationLink ?? "https://www.youtube.com/watch?v=d43lJsK7Kvo"
 
         const name = "\u200B"
         const value = text.commands.help.detailedInfoPage.footer.insertInMessage([
@@ -205,7 +181,7 @@ function mainPage(locale: Locale): PageMenuCategory[] {
         ////    {name: "Website", value: "[ranni.vevo](https://www.youtube.com/watch?v=d43lJsK7Kvo)", inline: true},
         ////    {name: "Invite me!", value: "[Ranni Vevo](https://www.youtube.com/watch?v=d43lJsK7Kvo)", inline: true},
         ////    {name: "Join me guild!", value: "[Ranni's Tower](https://www.youtube.com/watch?v=d43lJsK7Kvo)", inline: true},
-        {name: "\u200B", value: text.commands.help.menu.credits.get("en-US"), inline: false}
+        {name: "\u200B", value: text.commands.help.menu.credits.get(Locale.EnglishUS), inline: false}
     )
 
     return [{ id: "mainPage", pages: { "mainPage": new Page({id: "mainPage", embeds: [menuEmbed]})}}]

@@ -12,8 +12,8 @@ import {
     MessageEditOptions,
     MessageFlags
 } from "discord.js";
-import {EmbedGenerator, LoggerType, StaticLogger} from "../utils/index.js";
-import {Button, CallbackProps, ComponentPrototypes, StringSelect} from "./index.js";
+import {EmbedGenerator, handleError, LoggerType, StaticLogger} from "../utils/index.js";
+import {Button, CallbackProps, ComponentPrototypes, StringSelect, UserSelect} from "./index.js";
 import {useClient} from "../hooks/useClient.js";
 import {Colors} from "../config/index.js";
 
@@ -86,7 +86,7 @@ export class Page {
     }
 }
 
-class PageAnchor {
+export class PageAnchor {
     protected pageLogger: StaticLogger
     protected activeComponents: ComponentPrototypes[][] = []
     protected anchor?: Message | InteractionResponse
@@ -129,7 +129,7 @@ class PageAnchor {
 
     protected async handleInteractions(interaction: BaseInteraction, methode: AnchorHandling, timeout?: number, ephemeral?: boolean) {
         // * Sending Page.
-        const flags = ephemeral ? "Ephemeral": undefined
+        const flags = ephemeral ? "Ephemeral" : undefined
         const replyPayload = (): BaseMessageOptions | InteractionReplyOptions => {
             return {
                 embeds: this.createEmbedArray(),
@@ -153,7 +153,7 @@ class PageAnchor {
                     if (interaction.replied) this.setCollector(await interaction.editReply(updatePayload()), interaction, timeout)
                     else this.setCollector(await interaction.reply(replyPayload()), interaction, timeout)
                 } catch {
-                    this.pageLogger.info("Force update Page. Maybe fix required.")
+                    this.pageLogger.info("Force update Page while sending. Maybe fix required.")
                     this.anchor?.edit(updatePayload()) // ! Not tested
                 }
                 break;
@@ -165,10 +165,10 @@ class PageAnchor {
 
             case AnchorHandling.update:
                 try {
-                    if (interaction.isMessageComponent()) await interaction.update(updatePayload())
+                    if (interaction.isMessageComponent() || interaction.isModalSubmit() && interaction.isFromMessage()) await interaction.update(updatePayload())
                     else if (interaction.isRepliable()) await interaction.editReply(updatePayload())
                 } catch {
-                    this.pageLogger.info("Force update Page. Maybe fix required.")
+                    this.pageLogger.info("Force update Page while updating. Maybe fix required.")
                     this.anchor?.edit(updatePayload()) // ! Not tested
                 }
                 break;
@@ -183,9 +183,9 @@ class PageAnchor {
         const filter = (i: Interaction) => i.user.id === interaction.user.id;
         const componentCollector = anchor.createMessageComponentCollector({ filter, time: timeout });
 
-        componentCollector.on("collect", (interaction) => {
+        componentCollector.on("collect", async (interaction) => {
             componentCollector.resetTimer();
-            this.handleComponentInteraction(interaction);
+            await this.handleComponentInteraction(interaction);
         });
         componentCollector.on("end", async () => {
             if (anchor instanceof Message && anchor.flags.has(MessageFlags.Ephemeral)) return
@@ -194,18 +194,25 @@ class PageAnchor {
         return this
         }
 
-    protected handleComponentInteraction(interaction: MessageComponentInteraction) {
+    protected async handleComponentInteraction(interaction: MessageComponentInteraction) {
         // ! Currently working. If any error occurs: Use else if chain.
         const callbackParams: CallbackProps<any> = {interaction, client: useClient(), logger: this.pageLogger};
         for (const component of this.activeComponents.flat()) {
             if (component.callback && interaction.customId === component.id) {
-                switch (true) {
-                    case component instanceof Button && interaction.isButton():
-                        component.callback(callbackParams);
-                        break;
-                    case component instanceof StringSelect && interaction.isStringSelectMenu():
-                        component.callback(callbackParams);
-                        break;
+                try {
+                    switch (true) {
+                        case component instanceof Button && interaction.isButton():
+                            component.callback(callbackParams);
+                            break;
+                        case component instanceof StringSelect && interaction.isStringSelectMenu():
+                            component.callback(callbackParams);
+                            break;
+                        case component instanceof UserSelect && interaction.isUserSelectMenu():
+                            component.callback(callbackParams);
+                            break;
+                    }
+                } catch (e) {
+                    await handleError(interaction, this.pageLogger, e)
                 }
             }
         }
